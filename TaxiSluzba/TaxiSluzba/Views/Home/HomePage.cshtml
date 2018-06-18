@@ -1,0 +1,112 @@
+﻿<html>
+    <head>
+        <style>
+            .split {
+                height: 100%;
+                width: 50%;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                overflow-x: hidden;
+                padding-top: 20px;
+            }
+
+            .left {
+                left: 0;
+                background-color: #ffa64d;
+            }
+
+            .right {
+                right: 0;
+                background-color: #ff471a;
+            }
+
+            .centered {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+            }
+
+                .centered img {
+                    width: 150px;
+                    border-radius: 50%;
+                }
+        </style>
+    </head>
+<body>
+    <div class="split left">
+        <div class="centered">
+            <h1>Registracija</h1>
+            <form action="/Home/Registracija">
+                <table>
+                    <tr>
+                        <td>Korisnicko ime:</td>
+                        <td><input type="text" name="user"></td>
+                    </tr>
+                    <tr>
+                        <td>Lozinka: </td>
+                        <td><input type="password" name="pass"></td>
+                    </tr>
+                    <tr>
+                        <td>Ime: </td>
+                        <td><input type="text" name="ime"></td>
+                    </tr>
+                    <tr>
+                        <td>Prezime: </td>
+                        <td><input type="text" name="prezime"></td>
+                    </tr>
+                    <tr>
+                        <td>Pol: </td>
+                        <td align="left">
+                            <select name="pol">
+                                <option></option>
+                                <option value="MUSKI">Muski</option>
+                                <option value="ZENSKI">Zenski</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>JMBG: </td>
+                        <td><input type="text" name="jmbg"></td>
+                    </tr>
+                    <tr>
+                        <td>Kontakt telefon: </td>
+                        <td><input type="text" name="telefon"></td>
+                    </tr>
+                    <tr>
+                        <td>Email: </td>
+                        <td><input type="text" name="email"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><input type="submit" value="Registruj se"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div class="split right">
+        <div class="centered">
+            <h1>Logovanje</h1>
+            <form action="/Home/Logovanje">
+                <table>
+                    <tr>
+                        <td>Korisnicko ime:</td>
+                        <td><input type="text" name="user"></td>
+                    </tr>
+                    <tr>
+                        <td>Lozinka: </td>
+                        <td><input type="password" name="pass"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><input type="submit" value="Log in"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
