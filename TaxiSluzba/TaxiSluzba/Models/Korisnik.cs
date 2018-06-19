@@ -19,9 +19,9 @@ namespace TaxiSluzba.Models
         public string tipVoznje { get; set; }
         public List<Voznja> voznje { get; set; }
 
-        public Korisnik() { }
+        public Korisnik() { voznje = new List<Voznja>(); }
 
-        public Korisnik(string korisnickoIme, string lozinka, string ime, string prezime, Pol pol, string jmbg, string telefon, string email, Uloga uloga/*, string tipVoznje*/)
+        public Korisnik(string korisnickoIme, string lozinka, string ime, string prezime, Pol pol, string jmbg, string telefon, string email)
         {
             this.korisnickoIme = korisnickoIme;
             this.lozinka = lozinka;
@@ -31,8 +31,9 @@ namespace TaxiSluzba.Models
             this.jmbg = jmbg;
             this.telefon = telefon;
             this.email = email;
-            this.uloga = uloga;
+            this.uloga = Uloga.MUSTERIJA;
             //this.tipVoznje = tipVoznje;
+            this.voznje = new List<Voznja>();
         }
     }
 }

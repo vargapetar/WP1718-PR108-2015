@@ -20,18 +20,12 @@ namespace TaxiSluzba.Models
 
         public Voznja() { }
 
-        public Voznja(string datumVreme, Lokacija lokacijaZaTaksi, TipAutomobila tipAutomobila, Musterija musterija, Lokacija odrediste, Dispecer dispecer, Vozac vozac, string iznos, string komentar, StatusVoznje statusVoznje)
+        public Voznja(string datumVreme, Lokacija lokacijaZaTaksi, TipAutomobila tipAutomobila, Musterija musterija)
         {
             this.datumVreme = datumVreme;
             this.lokacijaZaTaksi = lokacijaZaTaksi;
             this.tipAutomobila = tipAutomobila;
             this.musterija = musterija;
-            this.odrediste = odrediste;
-            this.dispecer = dispecer;
-            this.vozac = vozac;
-            this.iznos = iznos;
-            this.komentar = komentar;
-            this.statusVoznje = statusVoznje;
         }
     }
 }

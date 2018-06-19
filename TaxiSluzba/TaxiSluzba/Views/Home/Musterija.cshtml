@@ -1,0 +1,196 @@
+﻿<html>
+    <head>
+        <style>
+            .tab {
+                overflow: hidden;
+                border: 1px solid #ccc;
+                background-color: #f1f1f1;
+            }
+
+                /* Style the buttons that are used to open the tab content */
+                .tab button {
+                    background-color: inherit;
+                    float: left;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    padding: 14px 16px;
+                    transition: 0.3s;
+                }
+
+                    /* Change background color of buttons on hover */
+                    .tab button:hover {
+                        background-color: #ddd;
+                    }
+
+                    /* Create an active/current tablink class */
+                    .tab button.active {
+                        background-color: #ccc;
+                    }
+
+            /* Style the tab content */
+            .tabcontent {
+                display: none;
+                padding: 6px 12px;
+                border: 1px solid #ccc;
+                border-top: none;
+            }
+        </style>
+
+        <script>
+            function openCity(evt, cityName) {
+                // Declare all variables
+                var i, tabcontent, tablinks;
+
+                // Get all elements with class="tabcontent" and hide them
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+
+                // Get all elements with class="tablinks" and remove the class "active"
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+
+                // Show the current tab, and add an "active" class to the button that opened the tab
+                document.getElementById(cityName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="tab">
+            <button class="tablinks" onclick="openCity(event, 'NaruciVoznju')">Naruci voznju</button>
+            <button class="tablinks" onclick="openCity(event, 'Profil')">Profil</button>
+            <button class="tablinks" onclick="openCity(event, 'Izmena')">Izmena</button>
+        </div>
+
+        <!-- Tab content -->
+        <div id="NaruciVoznju" class="tabcontent">
+            <form action="/Home/PoruciVoznju">
+                <table>
+                    <tr>
+                        <td>Korisnicko ime: </td>
+                        <td><input type="text" readonly name="korisnickoIme" value=@HttpContext.Current.Cache["ulogovan"].ToString()></td>
+                    </tr>
+                    <tr>
+                        <td>Ulica: </td>
+                        <td><input type="text" name="ulica"></td>
+                    </tr>
+                    <tr>
+                        <td>Broj: </td>
+                        <td><input type="text" name="broj"></td>
+                    </tr>
+                    <tr>
+                        <td>Grad: </td>
+                        <td><input type="text" name="grad"></td>
+                    </tr>
+                    <tr>
+                        <td>Postanski broj: </td>
+                        <td><input type="text" name="poBroj"></td>
+                    </tr>
+                    <tr>
+                        <td>Tip prevoza: </td>
+                        <td align="left">
+                            <select name="tipPrevoza">
+                                <option value="PUTNICKI_AUTOMOBIL">Putnicki automobil</option>
+                                <option value="KOMBI">Kombi</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><input type="submit" value="Posalji" onclick="alert('Voznja je porucena')"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <div id="Profil" class="tabcontent">
+            <table>
+                <tr>
+                    <td>Korisnicko ime:</td>
+                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].korisnickoIme</td>
+                </tr>
+                <tr>
+                    <td>Lozinka: </td>
+                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].lozinka</td>
+                </tr>
+                <tr>
+                    <td>Ime: </td>
+                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].ime</td>
+                </tr>
+                <tr>
+                    <td>Prezime: </td>
+                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].prezime</td>
+                </tr>
+                <tr>
+                    <td>Pol: </td>
+                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].pol</td>
+                </tr>
+                <tr>
+                    <td>JMBG: </td>
+                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].jmbg</td>
+                </tr>
+                <tr>
+                    <td>Kontakt telefon: </td>
+                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].telefon</td>
+                </tr>
+                <tr>
+                    <td>Email: </td>
+                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].email</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="Izmena" class="tabcontent">
+            <form action="/Home/IzmeniPodatke">
+                <table>
+                    <tr>
+                        <td>Korisnicko ime:</td>
+                        <td><input type="text" name="user" readonly value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].korisnickoIme></td>
+                    </tr>
+                    <tr>
+                        <td>Lozinka: </td>
+                        <td><input type="text" name="pass" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].lozinka></td>
+                    </tr>
+                    <tr>
+                        <td>Ime: </td>
+                        <td><input type="text" name="ime" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].ime></td>
+                    </tr>
+                    <tr>
+                        <td>Prezime: </td>
+                        <td><input type="text" name="prezime" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].prezime></td>
+                    </tr>
+                    <tr>
+                        <td>Pol: </td>
+                        <td align="left">
+                            <select name="pol" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].pol>
+                                <option value="MUSKI">Muski</option>
+                                <option value="ZENSKI">Zenski</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>JMBG: </td>
+                        <td><input type="text" name="jmbg" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].jmbg></td>
+                    </tr>
+                    <tr>
+                        <td>Kontakt telefon: </td>
+                        <td><input type="text" name="telefon" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].telefon></td>
+                    </tr>
+                    <tr>
+                        <td>Email: </td>
+                        <td><input type="text" name="email" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].email></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><input type="submit" value="Izmeni" onclick="alert('Podaci su izmenjeni!')"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </body>
+</html>
+

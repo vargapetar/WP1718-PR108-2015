@@ -27,5 +27,30 @@ namespace TaxiSluzba.Models
             sw.WriteLine(res);
             sw.Close();
         }
+
+        //public static void CitajIzTxt()
+        //{
+        //    string pom = "";
+        //    string[] res;
+        //    Pol gender;
+
+        //    if (File.Exists(@"C:\WEBProjekat\Dispeceri.txt"))
+        //    {
+        //        StreamReader sr = new StreamReader(@"C:\WEBProjekat\Dispeceri.txt");
+        //        while((pom = sr.ReadLine()) != null)
+        //        {
+        //            res = pom.Split('_');
+
+        //            if (res[4] == "MUSKI")
+        //                gender = Pol.MUSKI;
+        //            else
+        //                gender = Pol.ZENSKI;
+
+        //            Dispecer d = new Dispecer(res[0], res[1], res[2], res[3], gender, res[5], res[6], res[7]);
+        //            registrovaniKorisnici.Add(res[0], d);
+        //        }
+        //        sr.Close();
+        //    }
+        //}
     }
 }
