@@ -63,22 +63,187 @@
 
 <body>
     <div class="tab">
-        <button class="tablinks" onclick="openCity(event, 'NaruciVoznju')">Naruci voznju</button>
-        <button class="tablinks" onclick="openCity(event, 'Profil')">Profil</button>
-        <button class="tablinks" onclick="openCity(event, 'Izmena')">Izmena</button>
+        <button class="tablinks" onclick="openCity(event, 'KreirajVozaca')">Kreiraj vozaca</button>
+        <button class="tablinks" onclick="openCity(event, 'KreirajVoznju')">Kreiraj voznju</button>
+        <button class="tablinks" onclick="openCity(event, 'DodeliVoznju')">Dodeli voznju</button>
     </div>
 
     <!-- Tab content -->
-    <div id="NaruciVoznju" class="tabcontent">
-        <h1> RADI!!! </h1>
+    <div id="KreirajVozaca" class="tabcontent">
+        <form action="/Home/KreirajVozaca">
+            <table>
+                <tr>
+                    <td>Korisnicko ime:</td>
+                    <td><input type="text" name="user"></td>
+                </tr>
+                <tr>
+                    <td>Lozinka: </td>
+                    <td><input type="password" name="pass"></td>
+                </tr>
+                <tr>
+                    <td>Ime: </td>
+                    <td><input type="text" name="ime"></td>
+                </tr>
+                <tr>
+                    <td>Prezime: </td>
+                    <td><input type="text" name="prezime"></td>
+                </tr>
+                <tr>
+                    <td>Pol: </td>
+                    <td align="left">
+                        <select name="pol">
+                            <option value="MUSKI">Muski</option>
+                            <option value="ZENSKI">Zenski</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>JMBG: </td>
+                    <td><input type="text" name="jmbg"></td>
+                </tr>
+                <tr>
+                    <td>Kontakt telefon: </td>
+                    <td><input type="text" name="telefon"></td>
+                </tr>
+                <tr>
+                    <td>Email: </td>
+                    <td><input type="text" name="email"></td>
+                </tr>
+                <tr>
+                    <td>Godiste automobila: </td>
+                    <td><input type="text" name="godisteAuto"></td>
+                </tr>
+                <tr>
+                    <td>Registracija automobila: </td>
+                    <td><input type="text" name="regAuto"></td>
+                </tr>
+                <tr>
+                    <td>Broj automobila: </td>
+                    <td><input type="text" name="brAuto"></td>
+                </tr>
+                <tr>
+                    <td>Tip automobila: </td>
+                    <td align="left">
+                        <select name="tipAuto">
+                            <option value="PUTNICKI_AUTOMOBIL">Putnicki</option>
+                            <option value="KOMBI">Kombi</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="submit" onclick="alert('Vozac je uspesno dodat!')" value="Kreiraj vozaca"></td>
+                </tr>
+            </table>
+        </form>
+
+
+
     </div>
 
-    <div id="Profil" class="tabcontent">
-        <h1> RADI!!! </h1>
+    <div id="KreirajVoznju" class="tabcontent">
+        <form action="/Home/KreirajVoznju">
+            <table>
+                <tr>
+                    <td>Ulica: </td>
+                    <td><input type="text" name="ulica"></td>
+                </tr>
+                <tr>
+                    <td>Broj: </td>
+                    <td><input type="text" name="broj"></td>
+                </tr>
+                <tr>
+                    <td>Grad: </td>
+                    <td><input type="text" name="grad"></td>
+                </tr>
+                <tr>
+                    <td>Postanski broj: </td>
+                    <td><input type="text" name="poBroj"></td>
+                </tr>
+                <tr>
+                    <td>Tip prevoza: </td>
+                    <td align="left">
+                        <select name="tipPrevoza">
+                            <option value="PUTNICKI_AUTOMOBIL">Putnicki automobil</option>
+                            <option value="KOMBI">Kombi</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">Slobodni vozaci:</td>
+                </tr>
+                    @{
+                        foreach (TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.slobodniVozaci.Values)
+                        {
+                            <tr>
+                               <td colspan="2" align="center">@v.korisnickoIme</td>
+                            </tr>
+                        }
+                    }
+                <tr>
+                    <td>Izaberite vozaca: </td>
+                    <td><input type="text" name="izabraniVozac"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="submit" value="Kreiraj voznju" onclick="alert('Voznja je dodeljena vozacu')"></td>
+                </tr>
+            </table>
+        </form>
     </div>
 
-    <div id="Izmena" class="tabcontent">
-        <h1> RADI!!! </h1>
+    <div id="DodeliVoznju" class="tabcontent">
+        <h1> Dodela voznje </h1>
+        <h4> Spisak voznji na cekanju</h4>
+        <table border="1">
+            <tr>
+                <td><b>Datum i vreme</b></td>
+                <td><b>Lokacija</b></td>
+                <td><b>Tip automobila</b></td>
+                <td><b>Musterija</b></td>
+            </tr>
+            @{
+            foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.voznjeNaCekanju.Values)
+            {
+                <tr>
+                    <td>@v.datumVreme.ToString() </td>
+                    <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj</td>
+                    <td>@v.tipAutomobila.ToString() </td>
+                    <td>@v.musterija.korisnickoIme </td>
+                </tr>
+
+        }
+            }
+        </table>
+
+        <h4> Spisak slobodnih vozaca</h4>
+        <table border="1">
+            <tr>
+                <td><b>Korisnicko ime vozaca</b></td>
+            </tr>
+            @{ 
+                foreach(TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.slobodniVozaci.Values)
+                {
+                    <tr>
+                        <td>@v.korisnickoIme</td>
+                    </tr>
+                }
+            }
+        </table>
+
+        <form action="/Home/DodeliVozacaVoznji">
+            <table>
+                <tr>
+                    <td>Musterija:</td>
+                    <td><input type="text" name="musterija"></td>
+                </tr>
+                <tr>
+                    <td>Vozac:</td>
+                    <td><input type="text" name="vozac"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="submit" value="Dodeli voznju" onclick="alert('Voznja je uspesno dodeljena vozacu')"></td>
+                </tr>
+            </table>
+        </form>
     </div>
 </body>
 </html>

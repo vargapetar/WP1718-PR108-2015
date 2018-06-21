@@ -9,6 +9,9 @@ namespace TaxiSluzba.Models
     public class Database
     {
         public static Dictionary<string, Korisnik> registrovaniKorisnici = new Dictionary<string, Korisnik>();
+        public static Dictionary<string, Vozac> vozaci = new Dictionary<string, Vozac>();
+        public static Dictionary<string, Vozac> slobodniVozaci = new Dictionary<string, Vozac>();
+        public static Dictionary<string, Voznja> voznjeNaCekanju = new Dictionary<string, Voznja>(); // voznje koje se prikazuju dispeceru(kljuc je vreme porudzbine voznje)
 
         public static void UpisiUTXT(Registration r)
         {

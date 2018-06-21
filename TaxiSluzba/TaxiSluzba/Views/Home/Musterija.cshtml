@@ -1,4 +1,6 @@
-﻿<html>
+﻿@model TaxiSluzba.Models.Korisnik
+
+<html>
     <head>
         <style>
             .tab {
@@ -62,10 +64,12 @@
     </head>
 
     <body>
+        <h2> Musterija </h2>
         <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'NaruciVoznju')">Naruci voznju</button>
             <button class="tablinks" onclick="openCity(event, 'Profil')">Profil</button>
             <button class="tablinks" onclick="openCity(event, 'Izmena')">Izmena</button>
+            <button class="tablinks" onclick="openCity(event, 'SpisakVoznji')">Spisak voznji</button>
         </div>
 
         <!-- Tab content -->
@@ -74,7 +78,7 @@
                 <table>
                     <tr>
                         <td>Korisnicko ime: </td>
-                        <td><input type="text" readonly name="korisnickoIme" value=@HttpContext.Current.Cache["ulogovan"].ToString()></td>
+                        <td><input type="text" readonly name="korisnickoIme" value=@Model.korisnickoIme></td>
                     </tr>
                     <tr>
                         <td>Ulica: </td>
@@ -112,35 +116,35 @@
             <table>
                 <tr>
                     <td>Korisnicko ime:</td>
-                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].korisnickoIme</td>
+                    <td>@Model.korisnickoIme</td>
                 </tr>
                 <tr>
                     <td>Lozinka: </td>
-                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].lozinka</td>
+                    <td>@Model.lozinka</td>
                 </tr>
                 <tr>
                     <td>Ime: </td>
-                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].ime</td>
+                    <td>@Model.ime</td>
                 </tr>
                 <tr>
                     <td>Prezime: </td>
-                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].prezime</td>
+                    <td>@Model.prezime</td>
                 </tr>
                 <tr>
                     <td>Pol: </td>
-                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].pol</td>
+                    <td>@Model.pol.ToString()</td>
                 </tr>
                 <tr>
                     <td>JMBG: </td>
-                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].jmbg</td>
+                    <td>@Model.jmbg</td>
                 </tr>
                 <tr>
                     <td>Kontakt telefon: </td>
-                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].telefon</td>
+                    <td>@Model.telefon</td>
                 </tr>
                 <tr>
                     <td>Email: </td>
-                    <td>@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].email</td>
+                    <td>@Model.email</td>
                 </tr>
             </table>
         </div>
@@ -150,24 +154,24 @@
                 <table>
                     <tr>
                         <td>Korisnicko ime:</td>
-                        <td><input type="text" name="user" readonly value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].korisnickoIme></td>
+                        <td><input type="text" name="user" readonly value=@Model.korisnickoIme></td>
                     </tr>
                     <tr>
                         <td>Lozinka: </td>
-                        <td><input type="text" name="pass" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].lozinka></td>
+                        <td><input type="text" name="pass" value=@Model.lozinka></td>
                     </tr>
                     <tr>
                         <td>Ime: </td>
-                        <td><input type="text" name="ime" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].ime></td>
+                        <td><input type="text" name="ime" value=@Model.ime></td>
                     </tr>
                     <tr>
                         <td>Prezime: </td>
-                        <td><input type="text" name="prezime" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].prezime></td>
+                        <td><input type="text" name="prezime" value=@Model.prezime></td>
                     </tr>
                     <tr>
                         <td>Pol: </td>
                         <td align="left">
-                            <select name="pol" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].pol>
+                            <select name="pol" value=@Model.pol>
                                 <option value="MUSKI">Muski</option>
                                 <option value="ZENSKI">Zenski</option>
                             </select>
@@ -175,21 +179,60 @@
                     </tr>
                     <tr>
                         <td>JMBG: </td>
-                        <td><input type="text" name="jmbg" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].jmbg></td>
+                        <td><input type="text" name="jmbg" value=@Model.jmbg></td>
                     </tr>
                     <tr>
                         <td>Kontakt telefon: </td>
-                        <td><input type="text" name="telefon" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].telefon></td>
+                        <td><input type="text" name="telefon" value=@Model.telefon></td>
                     </tr>
                     <tr>
                         <td>Email: </td>
-                        <td><input type="text" name="email" value=@TaxiSluzba.Models.Database.registrovaniKorisnici[HttpContext.Current.Cache["ulogovan"].ToString()].email></td>
+                        <td><input type="text" name="email" value=@Model.email></td>
                     </tr>
                     <tr>
                         <td colspan="2" align="center"><input type="submit" value="Izmeni" onclick="alert('Podaci su izmenjeni!')"></td>
                     </tr>
                 </table>
             </form>
+        </div>
+
+        <div id="SpisakVoznji" class="tabcontent">
+            <table border="1">
+                <tr>
+                    <td>Datum i vreme</td>
+                    <td>Mesto</td>
+                    <td>Tip automobila</td>
+                    <td>Status voznje</td>
+                </tr>
+                @{ 
+                    foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.registrovaniKorisnici[Model.korisnickoIme].voznje)
+                    {
+                        <tr>
+                            <td>@v.datumVreme.ToString()</td>
+                            <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj </td>
+                            <td>@v.tipAutomobila.ToString() </td>
+                            <td>@v.statusVoznje.ToString() </td>
+                            @*@{
+                                HttpContext.Current.Cache["datumVreme1"] = v.datumVreme;
+                                HttpContext.Current.Cache["ulica1"] = v.lokacijaZaTaksi.Adress.Ulica;
+                                HttpContext.Current.Cache["broj1"] = v.lokacijaZaTaksi.Adress.BrojUlice;
+                                HttpContext.Current.Cache["grad1"] = v.lokacijaZaTaksi.Adress.Grad;
+                                HttpContext.Current.Cache["poBroj1"] = v.lokacijaZaTaksi.Adress.PozivniBroj;
+                                HttpContext.Current.Cache["tipAuto1"] = v.tipAutomobila;
+                            }*@
+    
+                            @*<td><input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme"> </td>
+                            <td><input type="hidden" name="datumVoznje" value="@v.datumVreme"></td>*@
+
+                            @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
+                            {
+                                <td>@Html.ActionLink("Izmeni", "MusterijaMenjaVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme }) </td>
+                                <td>@Html.ActionLink("Otkazi", "MusterijaOtkazujeVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme}) </td>
+                            }
+                        </tr>
+                    }
+                }
+            </table>
         </div>
     </body>
 </html>

@@ -1,0 +1,40 @@
+﻿@model TaxiSluzba.Models.Voznja
+@{
+    ViewBag.Title = "MusterijaMenjaVoznju";
+}
+
+<form action="/Home/IzmenaVoznje">
+    <table>
+        <tr>
+            <td>Ulica:</td>
+            <td> <input type="text" name="ulica" value=@Model.lokacijaZaTaksi.Adress.Ulica> </td>
+        </tr>
+        <tr>
+            <td>Broj:</td>
+            <td> <input type="text" name="broj" value=@Model.lokacijaZaTaksi.Adress.BrojUlice> </td>
+        </tr>
+        <tr>
+            <td>Grad:</td>
+            <td> <input type="text" name="grad" value=@Model.lokacijaZaTaksi.Adress.Grad> </td>
+        </tr>
+        <tr>
+            <td>Postanski broj:</td>
+            <td> <input type="text" name="poBroj" value=@Model.lokacijaZaTaksi.Adress.PozivniBroj> </td>
+        </tr>
+        <tr>
+            <td>Tip Automobila: </td>
+            <td align="left" value=@Model.tipAutomobila>
+                <select name="tipAuto">
+                    <option value="PUTNICKI_AUTOMOBIL">Putnicki automobil</option>
+                    <option value="KOMBI">Kombi</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><input type="submit" value="Izmeni" onclick="alert('Podaci su izmenjeni!')"></td>
+        </tr>
+    </table>
+    <input type="hidden" name="userKorisnika" value="@Model.musterija.korisnickoIme">
+    <input type="hidden" name="datumVoznje" value="@Model.datumVreme">
+</form>
+

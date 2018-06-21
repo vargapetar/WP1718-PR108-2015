@@ -7,7 +7,7 @@ namespace TaxiSluzba.Models
 {
     public class Musterija : Korisnik
     {
-        public Musterija() { }
+        public Musterija() { voznje = new List<Voznja>(); }
 
         public Musterija(string korisnickoIme, string lozinka, string ime, string prezime, Pol pol, string jmbg, string telefon, string email)
         {
@@ -20,6 +20,7 @@ namespace TaxiSluzba.Models
             this.telefon = telefon;
             this.email = email;
             this.uloga = Uloga.MUSTERIJA;
+            voznje = new List<Voznja>();
         }
     }
 }

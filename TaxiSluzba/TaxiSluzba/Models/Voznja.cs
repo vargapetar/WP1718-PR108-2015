@@ -15,7 +15,7 @@ namespace TaxiSluzba.Models
         public Dispecer dispecer { get; set; }
         public Vozac vozac { get; set; }
         public string iznos { get; set; }
-        public string komentar { get; set; }
+        public Komentar komentar { get; set; }
         public StatusVoznje statusVoznje { get; set; }
 
         public Voznja() { }

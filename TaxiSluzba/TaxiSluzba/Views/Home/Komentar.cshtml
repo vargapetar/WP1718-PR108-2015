@@ -1,0 +1,20 @@
+﻿@model TaxiSluzba.Models.Voznja
+@{
+    ViewBag.Title = "Komentar";
+}
+
+<h2>Komentar</h2>
+<form action="/Home/KomentarMusterija">
+    <table>
+        <tr>
+            <td>Opis: </td>
+            <td><textarea name="comment" rows="8" cols="100"></textarea> </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><input type="submit" value="Ostavi komentar" onclick="alert('Komentar je ostavljen')"></td>
+        </tr>
+    </table>
+    <input type="hidden" name="datumVoznje" value="@Model.datumVreme">
+    <input type="hidden" name="userKorisnika" value="@Model.musterija.korisnickoIme">
+</form>
+

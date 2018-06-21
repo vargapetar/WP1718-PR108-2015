@@ -154,6 +154,7 @@
     <Compile Include="Models\Korisnik.cs" />
     <Compile Include="Models\Lokacija.cs" />
     <Compile Include="Models\Musterija.cs" />
+    <Compile Include="Models\OcenaVoznje.cs" />
     <Compile Include="Models\Pol.cs" />
     <Compile Include="Models\Registration.cs" />
     <Compile Include="Models\StatusVoznje.cs" />
@@ -205,6 +206,9 @@
     <Content Include="Views\Home\UspesnaRegistracija.cshtml" />
     <Content Include="Views\Home\Dispecer.cshtml" />
     <Content Include="Views\Home\Musterija.cshtml" />
+    <Content Include="Views\Home\Vozac.cshtml" />
+    <Content Include="Views\Home\MusterijaMenjaVoznju.cshtml" />
+    <Content Include="Views\Home\Komentar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
