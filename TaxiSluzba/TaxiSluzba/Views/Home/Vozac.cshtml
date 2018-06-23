@@ -1,7 +1,42 @@
-﻿
+﻿@model TaxiSluzba.Models.Vozac
 @{
     ViewBag.Title = "Vozac";
 }
 
 <h2>Vozac</h2>
+<h4>Voznja pristigla od dispecera</h4></br>
+<form action="/Home/PocniSaVoznjom">
+    <table border="1">
+        <tr>
+            <td><b>Musterija</b></td>
+            <td><b>Dispecer</b></td>
+            <td><b>Datum i vreme</b></td>
+            <td><b>Adresa</b></td>
+        </tr>
+        @{
+            if (TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje.Count != 0)
+            {
+                foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje)
+                {
+                    if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.OBRADJENA)
+                    {
+                        <tr>
+                            <td>@v.musterija.korisnickoIme</td>
+                            <td>@v.dispecer.korisnickoIme</td>
+                            <td>@v.datumVreme.ToString()</td>
+                            <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad <input type="hidden" name="datumVoznje" value="@v.datumVreme.ToString()"><input type="hidden" name="vozac" value="@Model.korisnickoIme"></td>
+                        </tr>
+                    }
+                }
+            }
+        }
+    </table></br>
+    @{
+        if (TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje.Count != 0)
+        {
+            <input type="submit" value="Odradi voznju">
+        }
+    }
 
+</form>
+<hr>

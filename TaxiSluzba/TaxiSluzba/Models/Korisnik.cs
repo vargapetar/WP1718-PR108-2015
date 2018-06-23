@@ -16,7 +16,7 @@ namespace TaxiSluzba.Models
         public string telefon { get; set; }
         public string email { get; set; }
         public Uloga uloga { get; set; }
-        public string tipVoznje { get; set; }
+        //public string tipVoznje { get; set; }
         public List<Voznja> voznje { get; set; }
 
         public Korisnik() { voznje = new List<Voznja>(); }

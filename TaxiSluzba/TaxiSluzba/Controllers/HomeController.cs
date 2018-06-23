@@ -10,8 +10,7 @@ namespace TaxiSluzba.Controllers
 {
     public class HomeController : Controller
     {
-        public string ulogovanAdmin;
-        public string ulogovanaMusterija;
+        public static string ulogovanAdmin;
 
         public ActionResult HomePage()
         {
@@ -56,7 +55,8 @@ namespace TaxiSluzba.Controllers
                     }
                     else if(Database.registrovaniKorisnici[user].uloga == Uloga.VOZAC)
                     {
-                        return View("Vozac");
+                        Vozac v = Database.vozaci[user];
+                        return View("Vozac", v);
                     }
                     else
                     {
@@ -107,7 +107,7 @@ namespace TaxiSluzba.Controllers
                 tipAuto = TipAutomobila.PUTNICKI_AUTOMOBIL;
 
             Musterija m = new Musterija(Database.registrovaniKorisnici[korisnickoIme].korisnickoIme, Database.registrovaniKorisnici[korisnickoIme].lozinka, Database.registrovaniKorisnici[korisnickoIme].ime, Database.registrovaniKorisnici[korisnickoIme].prezime, Database.registrovaniKorisnici[korisnickoIme].pol, Database.registrovaniKorisnici[korisnickoIme].jmbg, Database.registrovaniKorisnici[korisnickoIme].telefon, Database.registrovaniKorisnici[korisnickoIme].email);
-            Voznja v = new Voznja(DateTime.Now.ToString(), l, tipAuto, m);
+            Voznja v = new Voznja(DateTime.Now, l, tipAuto, m);
             v.statusVoznje = StatusVoznje.KREIRANA_NA_CEKANJU;
             Database.registrovaniKorisnici[korisnickoIme].voznje.Add(v);
             Database.voznjeNaCekanju.Add(v.datumVreme.ToString(), v);
@@ -184,6 +184,7 @@ namespace TaxiSluzba.Controllers
         #endregion
 
 
+        #region
         public ActionResult KreirajVozaca(string user, string pass, string ime, string prezime, string pol, string jmbg, string telefon, string email, string godisteAuto, string regAuto, string brAuto, string tipAuto)
         {
             Pol gender;
@@ -219,7 +220,10 @@ namespace TaxiSluzba.Controllers
                 tip = TipAutomobila.KOMBI;
             else
                 tip = TipAutomobila.PUTNICKI_AUTOMOBIL;
-            Voznja v = new Voznja(DateTime.Now.ToString(), l, tip, null);
+            Voznja v = new Voznja(DateTime.Now, l, tip, null);
+
+            if (tipPrevoza != Database.slobodniVozaci[izabraniVozac].automobil.tipAutomobila.ToString())
+                return View("Greska");
 
             v.dispecer = (Dispecer)Database.registrovaniKorisnici[ulogovanAdmin];
             v.vozac = Database.slobodniVozaci[izabraniVozac];
@@ -231,13 +235,48 @@ namespace TaxiSluzba.Controllers
             return View("Dispecer");
         }
 
-        public ActionResult DodeliVozacaVoznji(string musterija, string vozac)
+        public ActionResult DodeliVozacaVoznji(string voznja, string vozac)
         {
-            //dodeli voznji status obradjena
+            Voznja retVoznja = Database.voznjeNaCekanju[voznja];
+            retVoznja.statusVoznje = StatusVoznje.OBRADJENA;
+            retVoznja.dispecer = (Dispecer)Database.registrovaniKorisnici[ulogovanAdmin];
+            Database.registrovaniKorisnici[ulogovanAdmin].voznje.Add(retVoznja);
+            Database.voznjeNaCekanju.Remove(voznja);
+
+            Vozac retVozac = Database.slobodniVozaci[vozac];
+            Database.slobodniVozaci.Remove(vozac);
+            retVozac.voznje.Add(retVoznja);
+
+            retVoznja.vozac = retVozac;
 
             return View("Dispecer");
         }
+        #endregion
 
+        public ActionResult PocniSaVoznjom(string datumVoznje, string vozac)
+        {
+            Voznja vo = new Voznja();
+
+            foreach(Voznja v in Database.vozaci[vozac].voznje)
+            {
+                if(v.datumVreme.ToString() == datumVoznje)
+                {
+                    vo = v;
+                }
+            }
+
+            return View("PocniSaVoznjom", vo);
+        }
+
+        public ActionResult UspesnaVoznja(string datumVoznje)
+        {
+            return View("Greska"); //menjaj view na koji saljes!! stavljeno samo radi probe
+        }
+
+        public ActionResult NeuspesnaVoznja(string datumVoznje)
+        {
+            return View("Greska"); //menjaj view na koji saljes!! stavljeno samo radi probe
+        }
 
     }
 }

@@ -11,6 +11,7 @@ namespace TaxiSluzba.Models
         FORMIRANA,
         OBRADJENA,
         PRIHVACENA,
+        U_TOKU,
         OTKAZANA,
         NEUSPESNA,
         USPESNA

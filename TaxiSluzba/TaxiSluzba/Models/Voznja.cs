@@ -7,7 +7,7 @@ namespace TaxiSluzba.Models
 {
     public class Voznja
     {
-        public string datumVreme { get; set; }
+        public DateTime datumVreme { get; set; }
         public Lokacija lokacijaZaTaksi { get; set; }
         public TipAutomobila tipAutomobila { get; set; }
         public Musterija musterija { get; set; }
@@ -20,7 +20,7 @@ namespace TaxiSluzba.Models
 
         public Voznja() { }
 
-        public Voznja(string datumVreme, Lokacija lokacijaZaTaksi, TipAutomobila tipAutomobila, Musterija musterija)
+        public Voznja(DateTime datumVreme, Lokacija lokacijaZaTaksi, TipAutomobila tipAutomobila, Musterija musterija)
         {
             this.datumVreme = datumVreme;
             this.lokacijaZaTaksi = lokacijaZaTaksi;

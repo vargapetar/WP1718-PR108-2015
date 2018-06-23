@@ -169,19 +169,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">Slobodni vozaci:</td>
-                </tr>
-                    @{
-                        foreach (TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.slobodniVozaci.Values)
-                        {
-                            <tr>
-                               <td colspan="2" align="center">@v.korisnickoIme</td>
-                            </tr>
-                        }
-                    }
-                <tr>
-                    <td>Izaberite vozaca: </td>
-                    <td><input type="text" name="izabraniVozac"></td>
+                    <td>Slobodni vozaci:</td>
+                    <td align="left">
+                        <select name="izabraniVozac">
+                            @{
+                                foreach (TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.slobodniVozaci.Values)
+                                {
+                                    <option value="@v.korisnickoIme">@v.korisnickoIme, @v.automobil.tipAutomobila.ToString()</option>
+                                }
+                             }
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center"><input type="submit" value="Kreiraj voznju" onclick="alert('Voznja je dodeljena vozacu')"></td>
@@ -193,56 +191,26 @@
     <div id="DodeliVoznju" class="tabcontent">
         <h1> Dodela voznje </h1>
         <h4> Spisak voznji na cekanju</h4>
-        <table border="1">
-            <tr>
-                <td><b>Datum i vreme</b></td>
-                <td><b>Lokacija</b></td>
-                <td><b>Tip automobila</b></td>
-                <td><b>Musterija</b></td>
-            </tr>
-            @{
-            foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.voznjeNaCekanju.Values)
-            {
-                <tr>
-                    <td>@v.datumVreme.ToString() </td>
-                    <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj</td>
-                    <td>@v.tipAutomobila.ToString() </td>
-                    <td>@v.musterija.korisnickoIme </td>
-                </tr>
-
-        }
-            }
-        </table>
-
-        <h4> Spisak slobodnih vozaca</h4>
-        <table border="1">
-            <tr>
-                <td><b>Korisnicko ime vozaca</b></td>
-            </tr>
-            @{ 
-                foreach(TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.slobodniVozaci.Values)
-                {
-                    <tr>
-                        <td>@v.korisnickoIme</td>
-                    </tr>
-                }
-            }
-        </table>
-
         <form action="/Home/DodeliVozacaVoznji">
-            <table>
-                <tr>
-                    <td>Musterija:</td>
-                    <td><input type="text" name="musterija"></td>
-                </tr>
-                <tr>
-                    <td>Vozac:</td>
-                    <td><input type="text" name="vozac"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center"><input type="submit" value="Dodeli voznju" onclick="alert('Voznja je uspesno dodeljena vozacu')"></td>
-                </tr>
-            </table>
+            <select name="voznja">
+                @{
+                    foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.voznjeNaCekanju.Values)
+                    {
+                        <option value="@v.datumVreme.ToString()">@v.musterija.korisnickoIme - @v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj - @v.tipAutomobila.ToString() </option>
+                    }
+                }
+            </select>
+
+            <h4> Spisak slobodnih vozaca</h4>
+            <select name="vozac">
+                @{
+                    foreach (TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.slobodniVozaci.Values)
+                    {
+                        <option value="@v.korisnickoIme">@v.korisnickoIme - @v.automobil.tipAutomobila.ToString() </option>
+                    }
+                }
+            </select>
+            <input type="submit" value="Dodeli voznju" onclick="alert('Voznja je uspesno dodeljena vozacu')">
         </form>
     </div>
 </body>
