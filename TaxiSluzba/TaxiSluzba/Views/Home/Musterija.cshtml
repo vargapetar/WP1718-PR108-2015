@@ -226,8 +226,12 @@
 
                             @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
                             {
-                                <td>@Html.ActionLink("Izmeni", "MusterijaMenjaVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme }) </td>
-                                <td>@Html.ActionLink("Otkazi", "MusterijaOtkazujeVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme}) </td>
+                                <td>@Html.ActionLink("Izmeni", "MusterijaMenjaVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
+                                <td>@Html.ActionLink("Otkazi", "MusterijaOtkazujeVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString()}) </td>
+                            }
+                            @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.USPESNA)
+                            {
+                                <td>@Html.ActionLink("Komentar", "KomentarUspesno", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
                             }
                         </tr>
                     }

@@ -7,9 +7,13 @@
 <h4>Po zavrsetku voznje odaberite! Voznja je prosla:</h4></br>
 <form action="/Home/UspesnaVoznja">
     <input type="hidden" name="datumVoznje" value="@Model.datumVreme">
+    <input type="hidden" name="musterija" value="@Model.musterija.korisnickoIme">
+    <input type="hidden" name="vozac" value="@Model.vozac.korisnickoIme">
     <input type="submit" value="Uspeno">
 </form>
 <form action="/Home/NeuspesnaVoznja">
     <input type="hidden" name="datumVoznje" value="@Model.datumVreme">
+    <input type="hidden" name="vozac" value="@Model.vozac.korisnickoIme">
+    <input type="hidden" name="musterija" value="@Model.musterija.korisnickoIme">
     <input type="submit" value="Neuspesno">
 </form>

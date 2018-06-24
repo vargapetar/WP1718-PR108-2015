@@ -6,37 +6,86 @@
 <h2>Vozac</h2>
 <h4>Voznja pristigla od dispecera</h4></br>
 <form action="/Home/PocniSaVoznjom">
-    <table border="1">
-        <tr>
-            <td><b>Musterija</b></td>
-            <td><b>Dispecer</b></td>
-            <td><b>Datum i vreme</b></td>
-            <td><b>Adresa</b></td>
-        </tr>
-        @{
-            if (TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje.Count != 0)
+    @{ foreach (TaxiSluzba.Models.Voznja voz in TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje)
+        {
+            if (voz.statusVoznje == TaxiSluzba.Models.StatusVoznje.OBRADJENA)
             {
-                foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje)
-                {
-                    if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.OBRADJENA)
+                <table border="1">
+                    <tr>
+                        <td><b>Musterija</b></td>
+                        <td><b>Dispecer</b></td>
+                        <td><b>Datum i vreme</b></td>
+                        <td><b>Adresa</b></td>
+                    </tr>
+                    @{
+                        foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje)
+                        {
+                            if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.OBRADJENA)
+                            {
+                                <tr>
+                                    <td>@v.musterija.korisnickoIme</td>
+                                    <td>@v.dispecer.korisnickoIme</td>
+                                    <td>@v.datumVreme.ToString()</td>
+                                    <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad <input type="hidden" name="datumVoznje" value="@v.datumVreme.ToString()"><input type="hidden" name="vozac" value="@Model.korisnickoIme"></td>
+                                </tr>
+                            }
+                        }
+                    }
+                </table>
+                <input type="submit" value="Odradi voznju">
+            }
+        }
+    }
+</form><hr>
+
+<h4>Lokacija:</h4>
+<form action="/Home/LokacijaTaksiste">
+    <table>
+        <tr>
+            <td>Ulica:</td>
+            <td><input type="text" name="ulica"></td>
+        </tr>
+        <tr>
+            <td>Broj:</td>
+            <td><input type="text" name="broj"></td>
+        </tr>
+        <tr>
+            <td>Grad:</td>
+            <td><input type="text" name="grad"></td>
+        </tr>
+        <tr>
+            <td>Postanski broj:</td>
+            <td><input type="text" name="poBroj"></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><input type="submit" value="Potvrdi" onclick="alert('Lokacija uspesno promenjena!')"></td>
+        </tr>
+                @{
+                    if (Model.lokacija.Adress.Grad != "NIJE_UNETO" && Model.lokacija.Adress.Ulica != "NIJE_UNETO" && Model.lokacija.Adress.BrojUlice != "NIJE_UNETO" && Model.lokacija.Adress.PozivniBroj != "NIJE_UNETO")
                     {
                         <tr>
-                            <td>@v.musterija.korisnickoIme</td>
-                            <td>@v.dispecer.korisnickoIme</td>
-                            <td>@v.datumVreme.ToString()</td>
-                            <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad <input type="hidden" name="datumVoznje" value="@v.datumVreme.ToString()"><input type="hidden" name="vozac" value="@Model.korisnickoIme"></td>
+                            <td>Prethodna lokacija:</td>
+                            <td><b>@Model.lokacija.Adress.Ulica @Model.lokacija.Adress.BrojUlice, @Model.lokacija.Adress.Grad</b></td>
                         </tr>
                     }
                 }
-            }
-        }
-    </table></br>
-    @{
-        if (TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje.Count != 0)
-        {
-            <input type="submit" value="Odradi voznju">
-        }
-    }
+    </table>
+    <input type="hidden" name="vozac" value="@Model.korisnickoIme">
+</form><hr>
 
+<h2>Preuzimanje voznje</h2>
+<form action="/Home/PreuzimanjeVoznje">
+    <select name="voznja">
+        @{
+            foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.voznjeNaCekanju.Values)
+            {
+                if (v.tipAutomobila.ToString() == Model.automobil.tipAutomobila.ToString())
+                {
+                    <option value="@v.datumVreme.ToString()">@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj - @v.tipAutomobila.ToString() </option>
+                }
+            }
+         }
+    </select>
+    <input type="submit" value="Preuzmi">
+    <input type="hidden" name="vozac" value="@Model.korisnickoIme">
 </form>
-<hr>

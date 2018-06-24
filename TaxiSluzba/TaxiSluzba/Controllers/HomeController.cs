@@ -55,6 +55,9 @@ namespace TaxiSluzba.Controllers
                     }
                     else if(Database.registrovaniKorisnici[user].uloga == Uloga.VOZAC)
                     {
+                        Adresa a = new Adresa("NIJE_UNETO", "NIJE_UNETO", "NIJE_UNETO", "NIJE_UNETO");
+                        Lokacija l = new Lokacija(1, 1, a);
+                        Database.vozaci[user].lokacija = l;
                         Vozac v = Database.vozaci[user];
                         return View("Vozac", v);
                     }
@@ -168,18 +171,53 @@ namespace TaxiSluzba.Controllers
             return View("Komentar", vo);
         }
 
-        public ActionResult KomentarMusterija(string comment, string datumVoznje, string userKorisnika)
+        public ActionResult KomentarMusterija(string comment, string datumVoznje, string userKorisnika, string ocena)
         {
             foreach (Voznja v in Database.registrovaniKorisnici[userKorisnika].voznje)
             {
                 if (v.datumVreme.ToString() == datumVoznje)
                 {
-                    Komentar k = new Komentar(comment, DateTime.Now, Database.registrovaniKorisnici[userKorisnika], v, OcenaVoznje.NULA);
-                    v.komentar = k;
+                    if (ocena == null)
+                    {
+                        Komentar k = new Komentar(comment, DateTime.Now, Database.registrovaniKorisnici[userKorisnika], v, OcenaVoznje.NULA);
+                        v.komentar = k;
+                    }
+                    else
+                    {
+                        OcenaVoznje rate;
+                        if (ocena == "JEDAN")
+                            rate = OcenaVoznje.JEDAN;
+                        else if (ocena == "JEDAN")
+                            rate = OcenaVoznje.DVA;
+                        else if (ocena == "JEDAN")
+                            rate = OcenaVoznje.TRI;
+                        else if (ocena == "JEDAN")
+                            rate = OcenaVoznje.CETIRI;
+                        else
+                            rate = OcenaVoznje.PET;
+
+                        Komentar k = new Komentar(comment, DateTime.Now, Database.registrovaniKorisnici[userKorisnika], v, rate);
+                        v.komentar = k;
+                    }
                 }
             }
 
             return View("Musterija", Database.registrovaniKorisnici[userKorisnika]);
+        }
+
+        public ActionResult KomentarUspesno(string datumVoznje, string korisnickoIme)
+        {
+            Voznja vo = new Voznja();
+
+            foreach (Voznja v in Database.registrovaniKorisnici[korisnickoIme].voznje)
+            {
+                if (v.datumVreme.ToString() == datumVoznje)
+                {
+                    vo = v;
+                }
+            }
+
+            return View("Komentar", vo);
         }
         #endregion
 
@@ -253,6 +291,7 @@ namespace TaxiSluzba.Controllers
         }
         #endregion
 
+        #region
         public ActionResult PocniSaVoznjom(string datumVoznje, string vozac)
         {
             Voznja vo = new Voznja();
@@ -261,6 +300,7 @@ namespace TaxiSluzba.Controllers
             {
                 if(v.datumVreme.ToString() == datumVoznje)
                 {
+                    v.statusVoznje = StatusVoznje.U_TOKU;
                     vo = v;
                 }
             }
@@ -268,15 +308,135 @@ namespace TaxiSluzba.Controllers
             return View("PocniSaVoznjom", vo);
         }
 
-        public ActionResult UspesnaVoznja(string datumVoznje)
+        public ActionResult UspesnaVoznja(string datumVoznje, string vozac, string musterija)
         {
-            return View("Greska"); //menjaj view na koji saljes!! stavljeno samo radi probe
+            Voznja vo = new Voznja();
+
+            foreach(Voznja v in Database.registrovaniKorisnici[musterija].voznje)
+            {
+                if(datumVoznje == v.datumVreme.ToString())
+                {
+                    v.statusVoznje = StatusVoznje.USPESNA;
+                    vo = v;
+                }
+            }
+
+            foreach (Voznja v in Database.vozaci[vozac].voznje)
+            {
+                if (datumVoznje == v.datumVreme.ToString())
+                {
+                    v.statusVoznje = StatusVoznje.USPESNA;
+                }
+            }
+
+            return View("UspesnaVoznja", vo); //menjaj view na koji saljes!! stavljeno samo radi probe
         }
 
-        public ActionResult NeuspesnaVoznja(string datumVoznje)
+        public ActionResult NeuspesnaVoznja(string datumVoznje, string musterija)
         {
-            return View("Greska"); //menjaj view na koji saljes!! stavljeno samo radi probe
+            Voznja vo = new Voznja();
+
+            foreach(Voznja v in Database.registrovaniKorisnici[musterija].voznje)
+            {
+                if(datumVoznje == v.datumVreme.ToString())
+                {
+                    vo = v;
+                }
+            }
+
+            return View("KomentarVozac", vo);
         }
 
+        public ActionResult KomentarVozac(string comment, string datumVoznje, string userKorisnika)
+        {
+
+            Vozac vo = new Vozac();
+
+            foreach(Voznja v in Database.registrovaniKorisnici[userKorisnika].voznje)
+            {
+                if(datumVoznje == v.datumVreme.ToString())
+                {
+                    Komentar k = new Komentar(comment, DateTime.Now, v.musterija, v, OcenaVoznje.NULA);
+                    v.komentar = k;
+                    v.statusVoznje = StatusVoznje.NEUSPESNA;
+                    vo = v.vozac;
+                }
+            }
+
+            return View("Vozac", vo);
+        }
+
+        public ActionResult ZavrsiVoznju(string ulica, string broj, string grad, string poBroj, string iznos, string datumVoznje, string musterija, string vozac)
+        {
+            foreach (Voznja v in Database.registrovaniKorisnici[musterija].voznje)
+            {
+                if (datumVoznje == v.datumVreme.ToString())
+                {
+                    Adresa a = new Adresa(ulica, broj, grad, poBroj);
+                    Lokacija l = new Lokacija(1, 1, a);
+                    v.odrediste = l;
+                    v.iznos = iznos;
+                    Database.vozaci[vozac].voznje.Add(v);
+                    //dodaj voznju vozacu u registrovanim korisnicima!!!!!
+                }
+            }
+
+            foreach (Voznja v in Database.vozaci[vozac].voznje)
+            {
+                if (datumVoznje == v.datumVreme.ToString())
+                {
+                    Adresa a = new Adresa(ulica, broj, grad, poBroj);
+                    Lokacija l = new Lokacija(1, 1, a);
+                    v.odrediste = l;
+                    v.iznos = iznos;
+                }
+            }
+
+            Database.slobodniVozaci.Add(vozac, Database.vozaci[vozac]);
+
+            return View("Vozac", Database.vozaci[vozac]); // dodaj u musteriji da mu izlista sve uspesne voznje i da moze da ostavi komentar
+        }
+
+        public ActionResult LokacijaTaksiste(string vozac, string ulica, string broj, string grad, string poBroj)
+        {
+            Adresa a = new Adresa(ulica, broj, grad, poBroj);
+            Lokacija l = new Lokacija(1, 1, a);
+            Database.vozaci[vozac].lokacija = l;
+
+            if (Database.slobodniVozaci.ContainsKey(vozac))
+                Database.slobodniVozaci[vozac].lokacija = l;
+
+            return View("Vozac", Database.vozaci[vozac]);
+        }
+
+        public ActionResult PreuzimanjeVoznje(string voznja, string vozac)
+        {
+            Voznja voz = new Voznja();
+
+            foreach(Korisnik k in Database.registrovaniKorisnici.Values)
+            {
+                if (k.uloga == Uloga.MUSTERIJA)
+                {
+                    foreach (Voznja vo in k.voznje)
+                    {
+                        if (vo.datumVreme.ToString() == voznja)
+                        {
+                            if (vo.statusVoznje == StatusVoznje.KREIRANA_NA_CEKANJU || vo.statusVoznje == StatusVoznje.FORMIRANA)
+                            {
+                                vo.statusVoznje = StatusVoznje.PRIHVACENA;
+                                voz = vo;
+                                voz.vozac = Database.vozaci[vozac];
+                                Database.voznjeNaCekanju.Remove(vo.datumVreme.ToString());
+                            }
+                        }
+                    }
+                }
+            }
+
+            Database.slobodniVozaci.Remove(vozac);
+
+            return View("PocniSaVoznjom", voz);
+        }
+        #endregion
     }
 }

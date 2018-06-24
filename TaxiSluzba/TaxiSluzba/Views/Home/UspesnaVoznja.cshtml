@@ -1,0 +1,39 @@
+﻿@model TaxiSluzba.Models.Voznja
+@{
+    ViewBag.Title = "UspesnaVoznja";
+}
+
+<h2>Voznja uspesno izvrsena</h2>
+<form action="/Home/ZavrsiVoznju">
+    <table>
+        <tr>
+            <td colspan="2" align="center"><input type="text" value="Odrediste:" readonly></td>
+        </tr>
+        <tr>
+            <td>Ulica:</td>
+            <td><input type="text" name="ulica"></td>
+        </tr>
+        <tr>
+            <td>Broj:</td>
+            <td><input type="text" name="broj"></td>
+        </tr>
+        <tr>
+            <td>Grad:</td>
+            <td><input type="text" name="grad"></td>
+        </tr>
+        <tr>
+            <td>Postanski broj:</td>
+            <td><input type="text" name="poBroj"></td>
+        </tr>
+        <tr>
+            <td>Iznos:</td>
+            <td><input type="text" name="iznos"></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center"><input type="submit" value="Zavrsi"></td>
+        </tr>
+    </table>
+    <input type="hidden" name="datumVoznje" value="@Model.datumVreme">
+    <input type="hidden" name="musterija" value="@Model.musterija.korisnickoIme">
+    <input type="hidden" name="vozac" value="@Model.vozac.korisnickoIme">
+</form>

@@ -210,6 +210,8 @@
     <Content Include="Views\Home\MusterijaMenjaVoznju.cshtml" />
     <Content Include="Views\Home\Komentar.cshtml" />
     <Content Include="Views\Home\PocniSaVoznjom.cshtml" />
+    <Content Include="Views\Home\KomentarVozac.cshtml" />
+    <Content Include="Views\Home\UspesnaVoznja.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
