@@ -44,6 +44,15 @@ namespace TaxiSluzba
                 //OBRISI
                 Korisnik k = new Korisnik("petar", "petar", "Petar", "Varga", Pol.MUSKI, "1508996800056", "0695057788", "petar.varga@protonmail.com");
                 Database.registrovaniKorisnici.Add(k.korisnickoIme, k);
+                Korisnik k2 = new Korisnik("zarko", "dsa", "Zarko", "Mihajlovic", Pol.MUSKI, "1904997800054", "0645177899", "nesto@gmail.com");
+                k2.uloga = Uloga.VOZAC;
+                Vozac v = new Vozac(k2, null, null);
+                Automobil a = new Automobil(v, "2011", "NS-053-ZJ", "1", TipAutomobila.PUTNICKI_AUTOMOBIL);
+                v.automobil = a;
+                a.vozac = v;
+                Database.registrovaniKorisnici.Add(k2.korisnickoIme, k2);
+                Database.vozaci.Add(v.korisnickoIme, v);
+                Database.slobodniVozaci.Add(v.korisnickoIme, v);
                 //OVO!!!!!!!!!!!
 
                 sr.Close();

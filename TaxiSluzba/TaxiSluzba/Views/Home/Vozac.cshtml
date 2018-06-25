@@ -8,7 +8,7 @@
 <form action="/Home/PocniSaVoznjom">
     @{ foreach (TaxiSluzba.Models.Voznja voz in TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje)
         {
-            if (voz.statusVoznje == TaxiSluzba.Models.StatusVoznje.OBRADJENA)
+            if (voz.statusVoznje == TaxiSluzba.Models.StatusVoznje.OBRADJENA || voz.statusVoznje == TaxiSluzba.Models.StatusVoznje.FORMIRANA)
             {
                 <table border="1">
                     <tr>
@@ -20,11 +20,11 @@
                     @{
                         foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje)
                         {
-                            if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.OBRADJENA)
+                            if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.OBRADJENA || v.statusVoznje == TaxiSluzba.Models.StatusVoznje.FORMIRANA)
                             {
                                 <tr>
-                                    <td>@v.musterija.korisnickoIme</td>
-                                    <td>@v.dispecer.korisnickoIme</td>
+                                    <td align="center">@v.musterija.korisnickoIme</td>
+                                    <td align="center">@v.dispecer.korisnickoIme</td>
                                     <td>@v.datumVreme.ToString()</td>
                                     <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad <input type="hidden" name="datumVoznje" value="@v.datumVreme.ToString()"><input type="hidden" name="vozac" value="@Model.korisnickoIme"></td>
                                 </tr>
@@ -88,4 +88,26 @@
     </select>
     <input type="submit" value="Preuzmi">
     <input type="hidden" name="vozac" value="@Model.korisnickoIme">
-</form>
+</form><hr>
+
+<h2>Sve voznje kojima ste/bili angazovani</h2>
+<table border="1">
+    <tr>
+        <td><b>Musterija:</b></td>
+        <td><b>Datum i vreme:</b></td>
+        <td><b>Dispecer:</b></td>
+        <td><b>Status voznje:</b></td>
+    </tr>
+    @foreach(TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje)
+    {
+        <tr>
+            <td align="center">@v.musterija.korisnickoIme</td>
+            <td>@v.datumVreme.ToString()</td>
+            <td align="center">@v.dispecer.korisnickoIme</td>
+            <td>@v.statusVoznje.ToString()</td>
+            <td>@Html.ActionLink("Detaljnije", "DetaljiVoznje", new { datumVoznje = v.datumVreme.ToString(), vozac = v.vozac.korisnickoIme })</td>
+        </tr>
+    }
+
+
+</table>

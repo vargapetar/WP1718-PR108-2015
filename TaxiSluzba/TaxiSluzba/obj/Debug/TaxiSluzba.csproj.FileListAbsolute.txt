@@ -84,8 +84,8 @@ C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\TaxiSluzba\bin\Microsoft.AI.
 C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\TaxiSluzba\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\TaxiSluzba\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\TaxiSluzba\bin\Microsoft.AI.Web.xml
-C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\TaxiSluzba\obj\Debug\TaxiSluzba.csprojResolveAssemblyReference.cache
 C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\TaxiSluzba\obj\Debug\TaxiSluzba.csproj.CoreCompileInputs.cache
 C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\TaxiSluzba\obj\Debug\TaxiSluzba.csproj.CopyComplete
 C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\TaxiSluzba\obj\Debug\TaxiSluzba.dll
 C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\TaxiSluzba\obj\Debug\TaxiSluzba.pdb
+C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\TaxiSluzba\obj\Debug\TaxiSluzba.csprojResolveAssemblyReference.cache

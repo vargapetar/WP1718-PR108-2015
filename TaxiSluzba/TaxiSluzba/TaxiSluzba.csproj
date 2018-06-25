@@ -212,6 +212,7 @@
     <Content Include="Views\Home\PocniSaVoznjom.cshtml" />
     <Content Include="Views\Home\KomentarVozac.cshtml" />
     <Content Include="Views\Home\UspesnaVoznja.cshtml" />
+    <Content Include="Views\Home\DetaljiVoznje.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

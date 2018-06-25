@@ -203,6 +203,8 @@
                     <td>Mesto</td>
                     <td>Tip automobila</td>
                     <td>Status voznje</td>
+                    <td>Komentar</td>
+                    <td>Ocena</td>
                 </tr>
                 @{ 
                     foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.registrovaniKorisnici[Model.korisnickoIme].voznje)
@@ -212,6 +214,8 @@
                             <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj </td>
                             <td>@v.tipAutomobila.ToString() </td>
                             <td>@v.statusVoznje.ToString() </td>
+                            <td align="center">@v.komentar.opis</td>
+                            <td>@v.komentar.ocenaVoznje.ToString()</td>
                             @*@{
                                 HttpContext.Current.Cache["datumVreme1"] = v.datumVreme;
                                 HttpContext.Current.Cache["ulica1"] = v.lokacijaZaTaksi.Adress.Ulica;

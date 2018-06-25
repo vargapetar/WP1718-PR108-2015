@@ -66,6 +66,7 @@
         <button class="tablinks" onclick="openCity(event, 'KreirajVozaca')">Kreiraj vozaca</button>
         <button class="tablinks" onclick="openCity(event, 'KreirajVoznju')">Kreiraj voznju</button>
         <button class="tablinks" onclick="openCity(event, 'DodeliVoznju')">Dodeli voznju</button>
+        <button class="tablinks" onclick="openCity(event, 'SpisakVoznji')">Spisak voznji</button>
     </div>
 
     <!-- Tab content -->
@@ -177,7 +178,7 @@
                                 {
                                     <option value="@v.korisnickoIme">@v.korisnickoIme, @v.automobil.tipAutomobila.ToString()</option>
                                 }
-                             }
+                            }
                         </select>
                     </td>
                 </tr>
@@ -212,6 +213,48 @@
             </select>
             <input type="submit" value="Dodeli voznju" onclick="alert('Voznja je uspesno dodeljena vozacu')">
         </form>
+    </div>
+
+    <div id="SpisakVoznji" class="tabcontent">
+        <h4>Spisak svih voznji u sistemu</h4>
+        <table border="1">
+            <tr>
+                <td><b>Datum i vreme:</b></td>
+                <td><b>Musterija:</b></td>
+                <td><b>Dispecer:</b></td>
+                <td><b>Vozac:</b></td>
+                <td><b>Status voznje:</b></td>
+            </tr>
+            @foreach(TaxiSluzba.Models.Korisnik k in TaxiSluzba.Models.Database.registrovaniKorisnici.Values)
+            {
+                if(k.uloga == TaxiSluzba.Models.Uloga.DISPECER)
+                {
+                    foreach(TaxiSluzba.Models.Voznja v in k.voznje)
+                    {
+                        <tr>
+                            <td>@v.datumVreme.ToString()</td>
+                            <td align="center">@v.musterija.korisnickoIme</td>
+                            <td align="center">@v.dispecer.korisnickoIme</td>
+                            <td>@v.vozac.korisnickoIme</td>
+                            <td>@v.statusVoznje.ToString()</td>
+                            <td>@Html.ActionLink("Detaljnije", "DetaljiVoznje", new { musterija = v.musterija.korisnickoIme, datumVoznje = v.datumVreme.ToString(), vozac = v.vozac.korisnickoIme })</td>
+                        </tr>
+                    }
+                }
+             }
+
+            @foreach(TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.voznjeNepoznatihDisp.Values)
+            {
+                <tr>
+                    <td>@v.datumVreme.ToString()</td>
+                    <td align="center">@v.musterija.korisnickoIme</td>
+                    <td align="center">@v.dispecer.korisnickoIme</td>
+                    <td>@v.vozac.korisnickoIme</td>
+                    <td>@v.statusVoznje.ToString()</td>
+                    <td>@Html.ActionLink("Detaljnije", "DetaljiVoznje", new { datumVoznje = v.datumVreme.ToString(), vozac = v.vozac.korisnickoIme })</td>
+                </tr>
+             }
+        </table>
     </div>
 </body>
 </html>

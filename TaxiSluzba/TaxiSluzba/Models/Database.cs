@@ -12,6 +12,8 @@ namespace TaxiSluzba.Models
         public static Dictionary<string, Vozac> vozaci = new Dictionary<string, Vozac>();
         public static Dictionary<string, Vozac> slobodniVozaci = new Dictionary<string, Vozac>();
         public static Dictionary<string, Voznja> voznjeNaCekanju = new Dictionary<string, Voznja>(); // voznje koje se prikazuju dispeceru(kljuc je vreme porudzbine voznje)
+        public static Dictionary<string, Voznja> neuspesneVoznje = new Dictionary<string, Voznja>(); //kljuc je vreme voznje
+        public static Dictionary<string, Voznja> voznjeNepoznatihDisp = new Dictionary<string, Voznja>(); //kljuce je vreme voznje
 
         public static void UpisiUTXT(Registration r)
         {

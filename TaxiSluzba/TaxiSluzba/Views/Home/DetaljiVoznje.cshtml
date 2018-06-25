@@ -1,0 +1,60 @@
+﻿@model TaxiSluzba.Models.Voznja
+@{
+    ViewBag.Title = "DetaljiVoznje";
+}
+
+<html>
+    <head>
+        <script> 
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+    </head>
+    <body>
+        <h2>Detalji voznje</h2>
+        <table>
+            <tr>
+                <td><b>Musterija:</b></td>
+                <td>@Model.musterija.korisnickoIme</td>
+            </tr>
+            <tr>
+                <td><b>Datum i vreme:</b></td>
+                <td>@Model.datumVreme.ToString()</td>
+            </tr>
+            <tr>
+                <td><b>Vozac:</b></td>
+                <td>@Model.vozac.korisnickoIme</td>
+            </tr>
+            <tr>
+                <td><b>Dispecer:</b></td>
+                <td>@Model.dispecer.korisnickoIme</td>
+            </tr>
+            <tr>
+                <td><b>Od:</b></td>
+                <td>@Model.lokacijaZaTaksi.Adress.Ulica @Model.lokacijaZaTaksi.Adress.BrojUlice, @Model.lokacijaZaTaksi.Adress.Grad</td>
+            </tr>
+            <tr>
+                <td><b>Do:</b></td>
+                <td>@Model.odrediste.Adress.Ulica @Model.odrediste.Adress.BrojUlice, @Model.odrediste.Adress.Grad</td>
+            </tr>
+            <tr>
+                <td><b>Komentar:</b></td>
+                <td>@Model.komentar.opis</td>
+            </tr>
+            <tr>
+                <td><b>Ocena:</b></td>
+                <td>@Model.komentar.ocenaVoznje.ToString()</td>
+            </tr>
+            <tr>
+                <td><b>Status voznje:</b></td>
+                <td>@Model.statusVoznje.ToString()</td>
+            </tr>
+            <tr>
+                <td><b>Iznos:</b></td>
+                <td>@Model.iznos</td>
+            </tr>
+        </table>
+        <button onclick="goBack()">Nazad</button>
+    </body>
+</html>
