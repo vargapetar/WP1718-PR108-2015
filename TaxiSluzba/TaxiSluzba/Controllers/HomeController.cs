@@ -559,13 +559,16 @@ namespace TaxiSluzba.Controllers
 
         public void AzurirajVoznju(Voznja voznja)
         {
+            Voznja retVoznja = new Voznja();
+            retVoznja = PopuniPolja(voznja);
+
             if (Database.sveVoznje.ContainsKey(voznja.datumVreme.ToString()))
-                Database.sveVoznje[voznja.datumVreme.ToString()] = voznja;
+                Database.sveVoznje[voznja.datumVreme.ToString()] = retVoznja;
             else
-                Database.sveVoznje.Add(voznja.datumVreme.ToString(), voznja);
+                Database.sveVoznje.Add(voznja.datumVreme.ToString(), retVoznja);
         }
 
-        public ActionResult Filtriranje(string statusVoznje, string korisnickoIme)
+        public ActionResult Filtriranje(string statusVoznje, string korisnickoIme, string korisnickoImeVozac)
         {
             List<Voznja> voznje = new List<Voznja>();
 
@@ -578,11 +581,34 @@ namespace TaxiSluzba.Controllers
                             voznje.Add(v);
                 }
             }
+            else if (korisnickoImeVozac != null)
+            {
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.komentar == null)
+                        v.komentar = new Komentar("-", DateTime.Now, v.musterija, v, OcenaVoznje.NULA);
+
+                    if (v.vozac.korisnickoIme == korisnickoImeVozac)
+                        if (v.statusVoznje.ToString() == statusVoznje)
+                            voznje.Add(v);
+                }
+            }
+            else
+            {
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.statusVoznje.ToString() == statusVoznje)
+                    {
+                        PopuniPolja(v);
+                        voznje.Add(v);
+                    }
+                }
+            }
 
             return View("RezultatAkcije", voznje);
         }
 
-        public ActionResult Sortiranje(string sortirajPo, string korisnickoIme)
+        public ActionResult Sortiranje(string sortirajPo, string korisnickoIme, string korisnickoImeVozac)
         {
             List<Voznja> voznje = new List<Voznja>();
             List<Voznja> retVoznje = new List<Voznja>();
@@ -598,6 +624,24 @@ namespace TaxiSluzba.Controllers
                 foreach (Voznja v in voznje)
                 {
                     if (v.musterija.korisnickoIme == korisnickoIme)
+                    {
+                        retVoznje.Add(v);
+                    }
+                }
+
+                if (sortirajPo == "datumu")
+                    sortirano = retVoznje.OrderBy(o => o.datumVreme).ToList();
+                else
+                    sortirano = retVoznje.OrderBy(o => o.komentar.ocenaVoznje).ToList();
+            }
+            else if(korisnickoImeVozac != null)
+            {
+                foreach (Voznja v in voznje)
+                {
+                    if (v.komentar == null)
+                        v.komentar = new Komentar("-", DateTime.Now, v.musterija, v, OcenaVoznje.NULA);
+
+                    if (v.vozac.korisnickoIme == korisnickoImeVozac)
                     {
                         retVoznje.Add(v);
                     }
@@ -813,6 +857,432 @@ namespace TaxiSluzba.Controllers
             }
 
             return View("RezultatAkcije", voznje);
+        }
+
+        public ActionResult PretragaVozac(string datumOd, string datumDo, string ocenaOd, string ocenaDo, string cenaOd, string cenaDo, string korisnickoIme)
+        {
+            List<Voznja> voznje = new List<Voznja>();
+
+            if (datumOd != "" && datumDo != "")
+            {
+                string[] pom = datumOd.Split(' ', '.', ':');
+                DateTime dateTimeOd = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                pom = datumDo.Split(' ', '.', ':');
+                DateTime dateTimeDo = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                        if (v.datumVreme > dateTimeOd)
+                            voznje.Add(v);
+                }
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                        if (v.datumVreme > dateTimeDo)
+                            voznje.Remove(v);
+                }
+            }
+            else if (datumOd != "")
+            {
+                string[] pom = datumOd.Split(' ', '.', ':');
+                DateTime dateTimeOd = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                        if (v.datumVreme > dateTimeOd)
+                            voznje.Add(v);
+                }
+            }
+            else if (datumDo != "")
+            {
+                string[] pom = datumDo.Split(' ', '.', ':');
+                DateTime dateTimeDo = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                        if (v.datumVreme < dateTimeDo)
+                            voznje.Add(v);
+                }
+            }
+
+            if (ocenaOd != "NULA" && ocenaDo != "NULA")
+            {
+                OcenaVoznje ocena1;
+                OcenaVoznje ocena2;
+
+                if (ocenaOd == "JEDAN")
+                    ocena1 = OcenaVoznje.JEDAN;
+                else if (ocenaOd == "DVA")
+                    ocena1 = OcenaVoznje.DVA;
+                else if (ocenaOd == "TRI")
+                    ocena1 = OcenaVoznje.TRI;
+                else if (ocenaOd == "CETIRI")
+                    ocena1 = OcenaVoznje.CETIRI;
+                else if (ocenaOd == "PET")
+                    ocena1 = OcenaVoznje.PET;
+                else
+                    ocena1 = OcenaVoznje.NULA;
+
+                if (ocenaDo == "JEDAN")
+                    ocena2 = OcenaVoznje.JEDAN;
+                else if (ocenaDo == "DVA")
+                    ocena2 = OcenaVoznje.DVA;
+                else if (ocenaDo == "TRI")
+                    ocena2 = OcenaVoznje.TRI;
+                else if (ocenaDo == "CETIRI")
+                    ocena2 = OcenaVoznje.CETIRI;
+                else if (ocenaDo == "PET")
+                    ocena2 = OcenaVoznje.PET;
+                else
+                    ocena2 = OcenaVoznje.NULA;
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                    {
+                        PopuniPolja(v);
+                        if (v.komentar.ocenaVoznje >= ocena1)
+                            voznje.Add(v);
+                    }
+                }
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                    {
+                        PopuniPolja(v);
+                        if (v.komentar.ocenaVoznje > ocena2)
+                            voznje.Remove(v);
+                    }
+                }
+            }
+            else if (ocenaOd != "NULA")
+            {
+                OcenaVoznje ocena1;
+
+                if (ocenaOd == "JEDAN")
+                    ocena1 = OcenaVoznje.JEDAN;
+                else if (ocenaOd == "DVA")
+                    ocena1 = OcenaVoznje.DVA;
+                else if (ocenaOd == "TRI")
+                    ocena1 = OcenaVoznje.TRI;
+                else if (ocenaOd == "CETIRI")
+                    ocena1 = OcenaVoznje.CETIRI;
+                else if (ocenaOd == "PET")
+                    ocena1 = OcenaVoznje.PET;
+                else
+                    ocena1 = OcenaVoznje.NULA;
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                    {
+                        PopuniPolja(v);
+                        if (v.komentar.ocenaVoznje >= ocena1)
+                            voznje.Add(v);
+                    }
+                }
+            }
+            else if (ocenaDo != "NULA")
+            {
+                OcenaVoznje ocena2;
+
+                if (ocenaDo == "JEDAN")
+                    ocena2 = OcenaVoznje.JEDAN;
+                else if (ocenaDo == "DVA")
+                    ocena2 = OcenaVoznje.DVA;
+                else if (ocenaDo == "TRI")
+                    ocena2 = OcenaVoznje.TRI;
+                else if (ocenaDo == "CETIRI")
+                    ocena2 = OcenaVoznje.CETIRI;
+                else if (ocenaDo == "PET")
+                    ocena2 = OcenaVoznje.PET;
+                else
+                    ocena2 = OcenaVoznje.NULA;
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                    {
+                        PopuniPolja(v);
+                        if (v.komentar.ocenaVoznje <= ocena2)
+                            voznje.Add(v);
+                    }
+                }
+            }
+
+
+
+            if (cenaOd != "" && cenaDo != "")
+            {
+                int min = Int32.Parse(cenaOd);
+                int max = Int32.Parse(cenaDo);
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                    {
+                        PopuniPolja(v);
+                        if (Int32.Parse(v.iznos) >= min)
+                            voznje.Add(v);
+                    }
+                }
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                    {
+                        PopuniPolja(v);
+                        if (Int32.Parse(v.iznos) > max)
+                            voznje.Remove(v);
+                    }
+                }
+            }
+            else if (cenaOd != "")
+            {
+                int min = Int32.Parse(cenaOd);
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                    {
+                        PopuniPolja(v);
+                        if (Int32.Parse(v.iznos) >= min)
+                            voznje.Add(v);
+                    }
+                }
+            }
+            else if (cenaDo != "")
+            {
+                int max = Int32.Parse(cenaDo);
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.vozac.korisnickoIme == korisnickoIme)
+                    {
+                        PopuniPolja(v);
+                        if (Int32.Parse(v.iznos) <= max)
+                            voznje.Add(v);
+                    }
+                }
+            }
+
+            return View("RezultatAkcije", voznje);
+        }
+
+        public ActionResult PretragaDispecer(string datumOd, string datumDo, string ocenaOd, string ocenaDo, string cenaOd, string cenaDo, string imeVozaca, string prezimeVozaca, string imeMusterije, string prezimeMusterije)
+        {
+            List<Voznja> voznje = new List<Voznja>();
+
+            if(datumOd != "" && datumDo != "")
+            {
+                string[] pom = datumOd.Split(' ', '.', ':');
+                DateTime dateTimeOd = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                pom = datumDo.Split(' ', '.', ':');
+                DateTime dateTimeDo = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.datumVreme > dateTimeOd)
+                        voznje.Add(v);
+                }
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.datumVreme > dateTimeDo)
+                      voznje.Remove(v);
+                }
+            }
+            else if(datumOd != "")
+            {
+                string[] pom = datumOd.Split(' ', '.', ':');
+                DateTime dateTimeOd = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.datumVreme > dateTimeOd)
+                        voznje.Add(v);
+                }
+            }
+            else if(datumDo != "")
+            {
+                string[] pom = datumDo.Split(' ', '.', ':');
+                DateTime dateTimeDo = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.datumVreme < dateTimeDo)
+                        voznje.Add(v);
+                }
+            }
+
+
+            if (ocenaOd != "NULA" && ocenaDo != "NULA")
+            {
+                OcenaVoznje ocena1;
+                OcenaVoznje ocena2;
+
+                if (ocenaOd == "JEDAN")
+                    ocena1 = OcenaVoznje.JEDAN;
+                else if (ocenaOd == "DVA")
+                    ocena1 = OcenaVoznje.DVA;
+                else if (ocenaOd == "TRI")
+                    ocena1 = OcenaVoznje.TRI;
+                else if (ocenaOd == "CETIRI")
+                    ocena1 = OcenaVoznje.CETIRI;
+                else if (ocenaOd == "PET")
+                    ocena1 = OcenaVoznje.PET;
+                else
+                    ocena1 = OcenaVoznje.NULA;
+
+                if (ocenaDo == "JEDAN")
+                    ocena2 = OcenaVoznje.JEDAN;
+                else if (ocenaDo == "DVA")
+                    ocena2 = OcenaVoznje.DVA;
+                else if (ocenaDo == "TRI")
+                    ocena2 = OcenaVoznje.TRI;
+                else if (ocenaDo == "CETIRI")
+                    ocena2 = OcenaVoznje.CETIRI;
+                else if (ocenaDo == "PET")
+                    ocena2 = OcenaVoznje.PET;
+                else
+                    ocena2 = OcenaVoznje.NULA;
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.komentar.ocenaVoznje >= ocena1)
+                        voznje.Add(v);
+                }
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.komentar.ocenaVoznje > ocena2)
+                        voznje.Remove(v);
+                }
+            }
+            else if (ocenaOd != "NULA")
+            {
+                OcenaVoznje ocena1;
+
+                if (ocenaOd == "JEDAN")
+                    ocena1 = OcenaVoznje.JEDAN;
+                else if (ocenaOd == "DVA")
+                    ocena1 = OcenaVoznje.DVA;
+                else if (ocenaOd == "TRI")
+                    ocena1 = OcenaVoznje.TRI;
+                else if (ocenaOd == "CETIRI")
+                    ocena1 = OcenaVoznje.CETIRI;
+                else if (ocenaOd == "PET")
+                    ocena1 = OcenaVoznje.PET;
+                else
+                    ocena1 = OcenaVoznje.NULA;
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.komentar.ocenaVoznje >= ocena1)
+                        voznje.Add(v);
+                }
+            }
+            else if (ocenaDo != "NULA")
+            {
+                OcenaVoznje ocena2;
+
+                if (ocenaDo == "JEDAN")
+                    ocena2 = OcenaVoznje.JEDAN;
+                else if (ocenaDo == "DVA")
+                    ocena2 = OcenaVoznje.DVA;
+                else if (ocenaDo == "TRI")
+                    ocena2 = OcenaVoznje.TRI;
+                else if (ocenaDo == "CETIRI")
+                    ocena2 = OcenaVoznje.CETIRI;
+                else if (ocenaDo == "PET")
+                    ocena2 = OcenaVoznje.PET;
+                else
+                    ocena2 = OcenaVoznje.NULA;
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.komentar.ocenaVoznje <= ocena2)
+                        voznje.Add(v);
+                }
+            }
+
+
+            if (cenaOd != "" && cenaDo != "")
+            {
+                int min = Int32.Parse(cenaOd);
+                int max = Int32.Parse(cenaDo);
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (Int32.Parse(v.iznos) >= min)
+                        voznje.Add(v);
+                }
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (Int32.Parse(v.iznos) > max)
+                        voznje.Remove(v);
+                }
+            }
+            else if (cenaOd != "")
+            {
+                int min = Int32.Parse(cenaOd);
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (Int32.Parse(v.iznos) >= min)
+                        voznje.Add(v);
+                }
+            }
+            else if (cenaDo != "")
+            {
+                int max = Int32.Parse(cenaDo);
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (Int32.Parse(v.iznos) <= max)
+                        voznje.Add(v);
+                }
+            }
+
+            //dodaj za pretragu po vozacu i muteriji
+
+            return View("RezultatAkcije", voznje);
+        }
+
+        public Voznja PopuniPolja(Voznja v)
+        {
+            if (v.dispecer == null)
+                v.dispecer = new Dispecer("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
+
+            if (v.musterija == null)
+                v.musterija = new Musterija("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
+
+            if (v.odrediste == null)
+                v.odrediste = new Lokacija(1, 1, new Adresa("-", "-", "-", "-"));
+
+            if (v.vozac == null)
+            {
+                Korisnik k = new Korisnik("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
+                Lokacija l = new Lokacija(1, 1, new Adresa("-", "-", "-", "-"));
+                Automobil a = new Automobil(new Vozac(), "-", "-", "-", TipAutomobila.PUTNICKI_AUTOMOBIL);
+                v.vozac = new Vozac(k, l, a);
+            }
+
+            if (v.komentar == null)
+                v.komentar = new Komentar("-", DateTime.Now, v.musterija, v, OcenaVoznje.NULA);
+
+            if (v.iznos == null)
+                v.iznos = "-1";
+
+            return v;
         }
     }
 }
