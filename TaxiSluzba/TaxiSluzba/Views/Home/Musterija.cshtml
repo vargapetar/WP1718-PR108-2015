@@ -1,67 +1,68 @@
 ﻿@model TaxiSluzba.Models.Korisnik
 
 <html>
-    <head>
-        <style>
-            .tab {
-                overflow: hidden;
-                border: 1px solid #ccc;
-                background-color: #f1f1f1;
+<head>
+    <style>
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+            /* Style the buttons that are used to open the tab content */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
             }
 
-                /* Style the buttons that are used to open the tab content */
-                .tab button {
-                    background-color: inherit;
-                    float: left;
-                    border: none;
-                    outline: none;
-                    cursor: pointer;
-                    padding: 14px 16px;
-                    transition: 0.3s;
+                /* Change background color of buttons on hover */
+                .tab button:hover {
+                    background-color: #ddd;
                 }
 
-                    /* Change background color of buttons on hover */
-                    .tab button:hover {
-                        background-color: #ddd;
-                    }
+                /* Create an active/current tablink class */
+                .tab button.active {
+                    background-color: #ccc;
+                }
 
-                    /* Create an active/current tablink class */
-                    .tab button.active {
-                        background-color: #ccc;
-                    }
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
 
-            /* Style the tab content */
-            .tabcontent {
-                display: none;
-                padding: 6px 12px;
-                border: 1px solid #ccc;
-                border-top: none;
+    <script>
+        function openCity(evt, cityName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
             }
-        </style>
 
-        <script>
-            function openCity(evt, cityName) {
-                // Declare all variables
-                var i, tabcontent, tablinks;
-
-                // Get all elements with class="tabcontent" and hide them
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-
-                // Get all elements with class="tablinks" and remove the class "active"
-                tablinks = document.getElementsByClassName("tablinks");
-                for (i = 0; i < tablinks.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" active", "");
-                }
-
-                // Show the current tab, and add an "active" class to the button that opened the tab
-                document.getElementById(cityName).style.display = "block";
-                evt.currentTarget.className += " active";
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
-        </script>
-    </head>
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</head>
 
     <body>
         <h2> Musterija </h2>
@@ -197,7 +198,7 @@
         </div>
 
         <div id="SpisakVoznji" class="tabcontent">
-            <table border="1">
+            <table border="1" id="spisakVoznji">
                 <tr>
                     <td>Datum i vreme</td>
                     <td>Mesto</td>
@@ -207,38 +208,31 @@
                     <td>Ocena</td>
                 </tr>
                 @{
-            foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.registrovaniKorisnici[Model.korisnickoIme].voznje)
-            {
-                <tr>
-                    <td>@v.datumVreme.ToString()</td>
-                    <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj </td>
-                    <td>@v.tipAutomobila.ToString() </td>
-                    <td>@v.statusVoznje.ToString() </td>
-                    <td align="center">@v.komentar.opis</td>
-                    <td>@v.komentar.ocenaVoznje.ToString()</td>
-                    @*@{
-                    HttpContext.Current.Cache["datumVreme1"] = v.datumVreme;
-                    HttpContext.Current.Cache["ulica1"] = v.lokacijaZaTaksi.Adress.Ulica;
-                    HttpContext.Current.Cache["broj1"] = v.lokacijaZaTaksi.Adress.BrojUlice;
-                    HttpContext.Current.Cache["grad1"] = v.lokacijaZaTaksi.Adress.Grad;
-                    HttpContext.Current.Cache["poBroj1"] = v.lokacijaZaTaksi.Adress.PozivniBroj;
-                    HttpContext.Current.Cache["tipAuto1"] = v.tipAutomobila;
-                }*@
+                    foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.sveVoznje.Values)
+                    {
+                        if(Model.korisnickoIme == v.musterija.korisnickoIme)
+                        {
+                        <tr>
+                            <td>@v.datumVreme.ToString()</td>
+                            <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj </td>
+                            <td>@v.tipAutomobila.ToString() </td>
+                            <td>@v.statusVoznje.ToString() </td>
+                            <td align="center">@v.komentar.opis</td>
+                            <td>@v.komentar.ocenaVoznje.ToString()</td>
+                    
+                            @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
+                            {
+                                <td>@Html.ActionLink("Izmeni", "MusterijaMenjaVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
+                                <td>@Html.ActionLink("Otkazi", "MusterijaOtkazujeVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
+                            }
+                            @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.USPESNA)
+                            {
+                                <td>@Html.ActionLink("Komentar", "KomentarUspesno", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
+                            }
+                        </tr>
+                        }
 
-                    @*<td><input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme"> </td>
-                <td><input type="hidden" name="datumVoznje" value="@v.datumVreme"></td>*@
-
-                    @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
-            {
-                <td>@Html.ActionLink("Izmeni", "MusterijaMenjaVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
-                <td>@Html.ActionLink("Otkazi", "MusterijaOtkazujeVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
-    }
-                    @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.USPESNA)
-            {
-                <td>@Html.ActionLink("Komentar", "KomentarUspesno", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
-    }
-                </tr>
-    }
+                    }
                 }
             </table>
 
