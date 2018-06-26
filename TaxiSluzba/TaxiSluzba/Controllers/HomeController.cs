@@ -112,8 +112,9 @@ namespace TaxiSluzba.Controllers
             Musterija m = new Musterija(Database.registrovaniKorisnici[korisnickoIme].korisnickoIme, Database.registrovaniKorisnici[korisnickoIme].lozinka, Database.registrovaniKorisnici[korisnickoIme].ime, Database.registrovaniKorisnici[korisnickoIme].prezime, Database.registrovaniKorisnici[korisnickoIme].pol, Database.registrovaniKorisnici[korisnickoIme].jmbg, Database.registrovaniKorisnici[korisnickoIme].telefon, Database.registrovaniKorisnici[korisnickoIme].email);
             Voznja v = new Voznja(DateTime.Now, l, tipAuto, m);
             v.statusVoznje = StatusVoznje.KREIRANA_NA_CEKANJU;
-            //
             v.komentar = new Komentar("-", DateTime.Now, Database.registrovaniKorisnici[korisnickoIme], v, OcenaVoznje.NULA);
+            //
+            AzurirajVoznju(v);
             Database.registrovaniKorisnici[korisnickoIme].voznje.Add(v);
             Database.voznjeNaCekanju.Add(v.datumVreme.ToString(), v);
 
@@ -129,6 +130,7 @@ namespace TaxiSluzba.Controllers
                 if(v.datumVreme.ToString() == datumVoznje)
                 {
                     vo = v;
+                    AzurirajVoznju(vo);
                 }
             }
             
@@ -152,6 +154,7 @@ namespace TaxiSluzba.Controllers
                     v.lokacijaZaTaksi.Adress.Grad = grad;
                     v.lokacijaZaTaksi.Adress.PozivniBroj = poBroj;
                     v.tipAutomobila = tip;
+                    AzurirajVoznju(v);
                 }
             }
             return View("Musterija", Database.registrovaniKorisnici[userKorisnika]);
@@ -167,6 +170,7 @@ namespace TaxiSluzba.Controllers
                 {
                     v.statusVoznje = StatusVoznje.OTKAZANA;
                     vo = v;
+                    AzurirajVoznju(v);
                 }
             }
 
@@ -183,23 +187,25 @@ namespace TaxiSluzba.Controllers
                     {
                         Komentar k = new Komentar(comment, DateTime.Now, Database.registrovaniKorisnici[userKorisnika], v, OcenaVoznje.NULA);
                         v.komentar = k;
+                        AzurirajVoznju(v);
                     }
                     else
                     {
                         OcenaVoznje rate;
                         if (ocena == "JEDAN")
                             rate = OcenaVoznje.JEDAN;
-                        else if (ocena == "JEDAN")
+                        else if (ocena == "DVA")
                             rate = OcenaVoznje.DVA;
-                        else if (ocena == "JEDAN")
+                        else if (ocena == "TRI")
                             rate = OcenaVoznje.TRI;
-                        else if (ocena == "JEDAN")
+                        else if (ocena == "CETIRI")
                             rate = OcenaVoznje.CETIRI;
                         else
                             rate = OcenaVoznje.PET;
 
                         Komentar k = new Komentar(comment, DateTime.Now, Database.registrovaniKorisnici[userKorisnika], v, rate);
                         v.komentar = k;
+                        AzurirajVoznju(v);
                     }
                 }
             }
@@ -216,6 +222,7 @@ namespace TaxiSluzba.Controllers
                 if (v.datumVreme.ToString() == datumVoznje)
                 {
                     vo = v;
+                    AzurirajVoznju(vo);
                 }
             }
 
@@ -271,7 +278,8 @@ namespace TaxiSluzba.Controllers
             Database.slobodniVozaci.Remove(izabraniVozac);
             v.statusVoznje = StatusVoznje.FORMIRANA;
             v.musterija = new Musterija("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
-
+            //
+            AzurirajVoznju(v);
             Database.vozaci[izabraniVozac].voznje.Add(v);
 
             return View("Dispecer");
@@ -290,6 +298,8 @@ namespace TaxiSluzba.Controllers
             retVozac.voznje.Add(retVoznja);
 
             retVoznja.vozac = retVozac;
+            //
+            AzurirajVoznju(retVoznja);
 
             return View("Dispecer");
         }
@@ -325,6 +335,8 @@ namespace TaxiSluzba.Controllers
             if (vo.odrediste == null)
                 vo.odrediste = l;
 
+            //
+            AzurirajVoznju(vo);
             return View("DetaljiVoznje", vo);
         }
         #endregion
@@ -341,6 +353,7 @@ namespace TaxiSluzba.Controllers
                     v.statusVoznje = StatusVoznje.U_TOKU;
                     vo = v;
                     Database.neuspesneVoznje.Add(vo.datumVreme.ToString(), vo);
+                    AzurirajVoznju(vo);
                 }
             }
 
@@ -361,6 +374,7 @@ namespace TaxiSluzba.Controllers
                     {
                         v.statusVoznje = StatusVoznje.USPESNA;
                         vo = v;
+                        AzurirajVoznju(vo);
                     }
                 }
             }
@@ -373,10 +387,14 @@ namespace TaxiSluzba.Controllers
                     {
                         Dispecer d = new Dispecer("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
                         v.dispecer = d;
+                        AzurirajVoznju(v);
                     }
                     v.statusVoznje = StatusVoznje.USPESNA;
                     if (!ret)
+                    {
                         vo = v;
+                        AzurirajVoznju(vo);
+                    }
                 }
             }
 
@@ -394,6 +412,7 @@ namespace TaxiSluzba.Controllers
                     if (datumVoznje == v.datumVreme.ToString())
                     {
                         vo = v;
+                        AzurirajVoznju(vo);
                     }
                 }
             }
@@ -404,6 +423,7 @@ namespace TaxiSluzba.Controllers
                     if (datumVoznje == v.datumVreme.ToString())
                     {
                         vo = v;
+                        AzurirajVoznju(vo);
                     }
                 }
             }
@@ -424,6 +444,7 @@ namespace TaxiSluzba.Controllers
                         Komentar k = new Komentar(comment, DateTime.Now, v.musterija, v, OcenaVoznje.NULA);
                         v.komentar = k;
                         v.statusVoznje = StatusVoznje.NEUSPESNA;
+                        AzurirajVoznju(v);
                         vo = v.vozac;
                         if(v.dispecer == null)
                         {
@@ -445,7 +466,7 @@ namespace TaxiSluzba.Controllers
                         v.komentar = k;
                         v.statusVoznje = StatusVoznje.NEUSPESNA;
                         vo = v.vozac;
-                        //v.dispecer.voznje.Add(v);
+                        AzurirajVoznju(v);
                         Database.slobodniVozaci.Add(v.vozac.korisnickoIme, v.vozac);
                     }
                 }
@@ -470,6 +491,7 @@ namespace TaxiSluzba.Controllers
                             Database.voznjeNepoznatihDisp.Add(v.datumVreme.ToString(), v);
                         //Database.vozaci[vozac].voznje.Add(v);
                         //dodaj voznju vozacu u registrovanim korisnicima!!!!!
+                        AzurirajVoznju(v);
                     }
                 }
             }
@@ -482,6 +504,7 @@ namespace TaxiSluzba.Controllers
                     Lokacija l = new Lokacija(1, 1, a);
                     v.odrediste = l;
                     v.iznos = iznos;
+                    AzurirajVoznju(v);
                 }
             }
 
@@ -521,6 +544,7 @@ namespace TaxiSluzba.Controllers
                                 voz.vozac = Database.vozaci[vozac];
                                 Database.voznjeNaCekanju.Remove(vo.datumVreme.ToString());
                                 Database.vozaci[vozac].voznje.Add(voz);
+                                AzurirajVoznju(voz);
                             }
                         }
                     }
@@ -532,5 +556,263 @@ namespace TaxiSluzba.Controllers
             return View("PocniSaVoznjom", voz);
         }
         #endregion
+
+        public void AzurirajVoznju(Voznja voznja)
+        {
+            if (Database.sveVoznje.ContainsKey(voznja.datumVreme.ToString()))
+                Database.sveVoznje[voznja.datumVreme.ToString()] = voznja;
+            else
+                Database.sveVoznje.Add(voznja.datumVreme.ToString(), voznja);
+        }
+
+        public ActionResult Filtriranje(string statusVoznje, string korisnickoIme)
+        {
+            List<Voznja> voznje = new List<Voznja>();
+
+            if (korisnickoIme != null && korisnickoIme !="-")
+            {
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (v.statusVoznje.ToString() == statusVoznje)
+                            voznje.Add(v);
+                }
+            }
+
+            return View("RezultatAkcije", voznje);
+        }
+
+        public ActionResult Sortiranje(string sortirajPo, string korisnickoIme)
+        {
+            List<Voznja> voznje = new List<Voznja>();
+            List<Voznja> retVoznje = new List<Voznja>();
+            List<Voznja> sortirano = new List<Voznja>();
+
+            foreach(Voznja v in Database.sveVoznje.Values)
+            {
+                voznje.Add(v);
+            }
+
+            if(korisnickoIme != null)
+            {
+                foreach (Voznja v in voznje)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                    {
+                        retVoznje.Add(v);
+                    }
+                }
+
+                if (sortirajPo == "datumu")
+                    sortirano = retVoznje.OrderBy(o => o.datumVreme).ToList();
+                else
+                    sortirano = retVoznje.OrderBy(o => o.komentar.ocenaVoznje).ToList();
+            }
+            else
+            {
+                if (sortirajPo == "datumu")
+                    sortirano = voznje.OrderBy(o => o.datumVreme).ToList();
+                else
+                    sortirano = voznje.OrderBy(o => o.komentar.ocenaVoznje).ToList();
+            }
+
+            return View("RezultatAkcije", sortirano);
+        }
+
+        public ActionResult Pretraga(string datumOd, string datumDo, string ocenaOd, string ocenaDo, string cenaOd, string cenaDo, string korisnickoIme)
+        {
+            List<Voznja> voznje = new List<Voznja>();
+
+            if (datumOd != "" && datumDo != "")
+            {
+                string[] pom = datumOd.Split(' ', '.', ':');
+                DateTime dateTimeOd = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                pom = datumDo.Split(' ', '.', ':');
+                DateTime dateTimeDo = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (v.datumVreme > dateTimeOd)
+                            voznje.Add(v);
+                }
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (v.datumVreme > dateTimeDo)
+                            voznje.Remove(v);
+                }
+            }
+            else if(datumOd != "")
+            {
+                string[] pom = datumOd.Split(' ', '.', ':');
+                DateTime dateTimeOd = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (v.datumVreme > dateTimeOd)
+                            voznje.Add(v);
+                }
+            }
+            else if(datumDo != "")
+            {
+                string[] pom = datumDo.Split(' ', '.', ':');
+                DateTime dateTimeDo = new DateTime(Int32.Parse(pom[2]), Int32.Parse(pom[1]), Int32.Parse(pom[0]), Int32.Parse(pom[4]), Int32.Parse(pom[5]), Int32.Parse(pom[6]));
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (v.datumVreme < dateTimeDo)
+                            voznje.Add(v);
+                }
+            }
+
+            if(ocenaOd != "NULA" && ocenaDo != "NULA")
+            {
+                OcenaVoznje ocena1;
+                OcenaVoznje ocena2;
+
+                if (ocenaOd == "JEDAN")
+                    ocena1 = OcenaVoznje.JEDAN;
+                else if (ocenaOd == "DVA")
+                    ocena1 = OcenaVoznje.DVA;
+                else if (ocenaOd == "TRI")
+                    ocena1 = OcenaVoznje.TRI;
+                else if (ocenaOd == "CETIRI")
+                    ocena1 = OcenaVoznje.CETIRI;
+                else if (ocenaOd == "PET")
+                    ocena1 = OcenaVoznje.PET;
+                else
+                    ocena1 = OcenaVoznje.NULA;
+
+                if (ocenaDo == "JEDAN")
+                    ocena2 = OcenaVoznje.JEDAN;
+                else if (ocenaDo == "DVA")
+                    ocena2 = OcenaVoznje.DVA;
+                else if (ocenaDo == "TRI")
+                    ocena2 = OcenaVoznje.TRI;
+                else if (ocenaDo == "CETIRI")
+                    ocena2 = OcenaVoznje.CETIRI;
+                else if (ocenaDo == "PET")
+                    ocena2 = OcenaVoznje.PET;
+                else
+                    ocena2 = OcenaVoznje.NULA;
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if(v.komentar != null && v.komentar.opis != "-")
+                            if (v.komentar.ocenaVoznje >= ocena1)
+                                voznje.Add(v);
+                }
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (v.komentar != null && v.komentar.opis != "-")
+                            if (v.komentar.ocenaVoznje > ocena2)
+                                voznje.Remove(v);
+                }
+            }
+            else if(ocenaOd != "NULA")
+            {
+                OcenaVoznje ocena1;
+
+                if (ocenaOd == "JEDAN")
+                    ocena1 = OcenaVoznje.JEDAN;
+                else if (ocenaOd == "DVA")
+                    ocena1 = OcenaVoznje.DVA;
+                else if (ocenaOd == "TRI")
+                    ocena1 = OcenaVoznje.TRI;
+                else if (ocenaOd == "CETIRI")
+                    ocena1 = OcenaVoznje.CETIRI;
+                else if (ocenaOd == "PET")
+                    ocena1 = OcenaVoznje.PET;
+                else
+                    ocena1 = OcenaVoznje.NULA;
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (v.komentar != null && v.komentar.opis != "-")
+                            if (v.komentar.ocenaVoznje >= ocena1)
+                                voznje.Add(v);
+                }
+            }
+            else if(ocenaDo != "NULA")
+            {
+                OcenaVoznje ocena2;
+
+                if (ocenaDo == "JEDAN")
+                    ocena2 = OcenaVoznje.JEDAN;
+                else if (ocenaDo == "DVA")
+                    ocena2 = OcenaVoznje.DVA;
+                else if (ocenaDo == "TRI")
+                    ocena2 = OcenaVoznje.TRI;
+                else if (ocenaDo == "CETIRI")
+                    ocena2 = OcenaVoznje.CETIRI;
+                else if (ocenaDo == "PET")
+                    ocena2 = OcenaVoznje.PET;
+                else
+                    ocena2 = OcenaVoznje.NULA;
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (v.komentar != null && v.komentar.opis != "-")
+                            if (v.komentar.ocenaVoznje <= ocena2)
+                                voznje.Add(v);
+                }
+            }
+
+
+
+            if(cenaOd != "" && cenaDo != "")
+            {
+                int min = Int32.Parse(cenaOd);
+                int max = Int32.Parse(cenaDo);
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (Int32.Parse(v.iznos) >= min)
+                            voznje.Add(v);
+                }
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (Int32.Parse(v.iznos) > max)
+                            voznje.Remove(v);
+                }
+            }
+            else if(cenaOd != "")
+            {
+                int min = Int32.Parse(cenaOd);
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (Int32.Parse(v.iznos) >= min)
+                            voznje.Add(v);
+                }
+            }
+            else if(cenaDo != "")
+            {
+                int max = Int32.Parse(cenaDo);
+
+                foreach (Voznja v in Database.sveVoznje.Values)
+                {
+                    if (v.musterija.korisnickoIme == korisnickoIme)
+                        if (Int32.Parse(v.iznos) <= max)
+                            voznje.Add(v);
+                }
+            }
+
+            return View("RezultatAkcije", voznje);
+        }
     }
 }

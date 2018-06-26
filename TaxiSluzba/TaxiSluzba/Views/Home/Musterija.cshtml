@@ -206,41 +206,117 @@
                     <td>Komentar</td>
                     <td>Ocena</td>
                 </tr>
-                @{ 
-                    foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.registrovaniKorisnici[Model.korisnickoIme].voznje)
-                    {
-                        <tr>
-                            <td>@v.datumVreme.ToString()</td>
-                            <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj </td>
-                            <td>@v.tipAutomobila.ToString() </td>
-                            <td>@v.statusVoznje.ToString() </td>
-                            <td align="center">@v.komentar.opis</td>
-                            <td>@v.komentar.ocenaVoznje.ToString()</td>
-                            @*@{
-                                HttpContext.Current.Cache["datumVreme1"] = v.datumVreme;
-                                HttpContext.Current.Cache["ulica1"] = v.lokacijaZaTaksi.Adress.Ulica;
-                                HttpContext.Current.Cache["broj1"] = v.lokacijaZaTaksi.Adress.BrojUlice;
-                                HttpContext.Current.Cache["grad1"] = v.lokacijaZaTaksi.Adress.Grad;
-                                HttpContext.Current.Cache["poBroj1"] = v.lokacijaZaTaksi.Adress.PozivniBroj;
-                                HttpContext.Current.Cache["tipAuto1"] = v.tipAutomobila;
-                            }*@
-    
-                            @*<td><input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme"> </td>
-                            <td><input type="hidden" name="datumVoznje" value="@v.datumVreme"></td>*@
+                @{
+            foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.registrovaniKorisnici[Model.korisnickoIme].voznje)
+            {
+                <tr>
+                    <td>@v.datumVreme.ToString()</td>
+                    <td>@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj </td>
+                    <td>@v.tipAutomobila.ToString() </td>
+                    <td>@v.statusVoznje.ToString() </td>
+                    <td align="center">@v.komentar.opis</td>
+                    <td>@v.komentar.ocenaVoznje.ToString()</td>
+                    @*@{
+                    HttpContext.Current.Cache["datumVreme1"] = v.datumVreme;
+                    HttpContext.Current.Cache["ulica1"] = v.lokacijaZaTaksi.Adress.Ulica;
+                    HttpContext.Current.Cache["broj1"] = v.lokacijaZaTaksi.Adress.BrojUlice;
+                    HttpContext.Current.Cache["grad1"] = v.lokacijaZaTaksi.Adress.Grad;
+                    HttpContext.Current.Cache["poBroj1"] = v.lokacijaZaTaksi.Adress.PozivniBroj;
+                    HttpContext.Current.Cache["tipAuto1"] = v.tipAutomobila;
+                }*@
 
-                            @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
-                            {
-                                <td>@Html.ActionLink("Izmeni", "MusterijaMenjaVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
-                                <td>@Html.ActionLink("Otkazi", "MusterijaOtkazujeVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString()}) </td>
-                            }
-                            @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.USPESNA)
-                            {
-                                <td>@Html.ActionLink("Komentar", "KomentarUspesno", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
-                            }
-                        </tr>
-                    }
+                    @*<td><input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme"> </td>
+                <td><input type="hidden" name="datumVoznje" value="@v.datumVreme"></td>*@
+
+                    @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
+            {
+                <td>@Html.ActionLink("Izmeni", "MusterijaMenjaVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
+                <td>@Html.ActionLink("Otkazi", "MusterijaOtkazujeVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
+    }
+                    @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.USPESNA)
+            {
+                <td>@Html.ActionLink("Komentar", "KomentarUspesno", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
+    }
+                </tr>
+    }
                 }
             </table>
+
+            <form action="/Home/Filtriranje">
+                <table>
+                    <tr>
+                        <td>Filtriraj:</td>
+                        <td>
+                            <select name="statusVoznje">
+                                <option value="KREIRANA_NA_CEKANJU">Kreirana, na cekanju</option>
+                                <option value="FORMIRANA">Formirana</option>
+                                <option value="OBRADJENA">Obradjena</option>
+                                <option value="PRIHVACENA">Prihvacena</option>
+                                <option value="U_TOKU">U toku</option>
+                                <option value="OTKAZANA">Otkazana</option>
+                                <option value="NEUSPESNA">Neuspesna</option>
+                                <option value="USPESNA">Uspesna</option>
+                            </select>
+                        </td>
+                        <td><input type="submit" value="Filtriraj"></td>
+                    </tr>
+                </table>
+                <input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme">
+            </form>
+
+            <form action="/Home/Sortiranje">
+                <table>
+                    <tr>
+                        <td>Sortiraj po:</td>
+                        <td>
+                            <select name="sortirajPo">
+                                <option value="datumu">Datumu</option>
+                                <option value="oceni">Oceni</option>
+                            </select>
+                        </td>
+                        <td><input type="submit" value="Sortiraj"></td>
+                    </tr>
+                </table>
+                <input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme">
+            </form>
+
+            <form action="/Home/Pretraga">
+                <table>
+                    <tr>
+                        <td>Pretraga po datumu:</td>
+                        <td><input type="text" name="datumOd"></td>
+                        <td><input type="text" name="datumDo"></td>
+                    </tr>
+                    <tr>
+                        <td>Pretraga po oceni:</td>
+                        <td><select name="ocenaOd">
+                                <option value="NULA"></option>
+                                <option value="JEDAN">1</option>
+                                <option value="DVA">2</option>
+                                <option value="TRI">3</option>
+                                <option value="CETIRI">4</option>
+                                <option value="PET">5</option>
+                            </select></td>
+                        <td><select name="ocenaDo">
+                                <option value="NULA"></option>
+                                <option value="JEDAN">1</option>
+                                <option value="DVA">2</option>
+                                <option value="TRI">3</option>
+                                <option value="CETIRI">4</option>
+                                <option value="PET">5</option>
+                            </select></td>
+                    </tr>
+                    <tr>
+                        <td>Pretraga po ceni:</td>
+                        <td><input type="text" name="cenaOd"></td>
+                        <td><input type="text" name="cenaDo"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" align="center"><input type="submit" value="Pretraga"></td>
+                    </tr>
+                </table>
+                <input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme">
+            </form>
         </div>
     </body>
 </html>

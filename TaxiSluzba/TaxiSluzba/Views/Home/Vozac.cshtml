@@ -60,15 +60,15 @@
         <tr>
             <td colspan="2" align="center"><input type="submit" value="Potvrdi" onclick="alert('Lokacija uspesno promenjena!')"></td>
         </tr>
-                @{
-                    if (Model.lokacija.Adress.Grad != "NIJE_UNETO" && Model.lokacija.Adress.Ulica != "NIJE_UNETO" && Model.lokacija.Adress.BrojUlice != "NIJE_UNETO" && Model.lokacija.Adress.PozivniBroj != "NIJE_UNETO")
-                    {
-                        <tr>
-                            <td>Prethodna lokacija:</td>
-                            <td><b>@Model.lokacija.Adress.Ulica @Model.lokacija.Adress.BrojUlice, @Model.lokacija.Adress.Grad</b></td>
-                        </tr>
-                    }
-                }
+        @{
+            if (Model.lokacija.Adress.Grad != "NIJE_UNETO" && Model.lokacija.Adress.Ulica != "NIJE_UNETO" && Model.lokacija.Adress.BrojUlice != "NIJE_UNETO" && Model.lokacija.Adress.PozivniBroj != "NIJE_UNETO")
+            {
+                <tr>
+                    <td>Prethodna lokacija:</td>
+                    <td><b>@Model.lokacija.Adress.Ulica @Model.lokacija.Adress.BrojUlice, @Model.lokacija.Adress.Grad</b></td>
+                </tr>
+            }
+        }
     </table>
     <input type="hidden" name="vozac" value="@Model.korisnickoIme">
 </form><hr>
@@ -84,7 +84,7 @@
                     <option value="@v.datumVreme.ToString()">@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj - @v.tipAutomobila.ToString() </option>
                 }
             }
-         }
+        }
     </select>
     <input type="submit" value="Preuzmi">
     <input type="hidden" name="vozac" value="@Model.korisnickoIme">
@@ -98,7 +98,7 @@
         <td><b>Dispecer:</b></td>
         <td><b>Status voznje:</b></td>
     </tr>
-    @foreach(TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje)
+    @foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje)
     {
         <tr>
             <td align="center">@v.musterija.korisnickoIme</td>
@@ -108,6 +108,84 @@
             <td>@Html.ActionLink("Detaljnije", "DetaljiVoznje", new { datumVoznje = v.datumVreme.ToString(), vozac = v.vozac.korisnickoIme })</td>
         </tr>
     }
-
-
 </table>
+
+<form action="/Home/Filtriranje">
+    <table>
+        <tr>
+            <td>Filtriraj:</td>
+            <td>
+                <select name="statusVoznje">
+                    <option value="KREIRANA_NA_CEKANJU">Kreirana, na cekanju</option>
+                    <option value="FORMIRANA">Formirana</option>
+                    <option value="OBRADJENA">Obradjena</option>
+                    <option value="PRIHVACENA">Prihvacena</option>
+                    <option value="U_TOKU">U toku</option>
+                    <option value="OTKAZANA">Otkazana</option>
+                    <option value="NEUSPESNA">Neuspesna</option>
+                    <option value="USPESNA">Uspesna</option>
+                </select>
+            </td>
+            <td><input type="submit" value="Filtriraj"></td>
+        </tr>
+    </table>
+    <input type="hidden" name="korisnickoImeVozac" value="@Model.korisnickoIme">
+</form>
+
+<form action="/Home/Sortiranje">
+    <table>
+        <tr>
+            <td>Sortiraj po:</td>
+            <td>
+                <select name="sortirajPo">
+                    <option value="datumu">Datumu</option>
+                    <option value="oceni">Oceni</option>
+                </select>
+            </td>
+            <td><input type="submit" value="Sortiraj"></td>
+        </tr>
+    </table>
+    <input type="hidden" name="korisnickoImeVozac" value="@Model.korisnickoIme">
+</form>
+
+<form action="/Home/Pretraga">
+    <table>
+        <tr>
+            <td>Pretraga po datumu:</td>
+            <td><input type="text" name="datumOd"></td>
+            <td><input type="text" name="datumDo"></td>
+        </tr>
+        <tr>
+            <td>Pretraga po oceni:</td>
+            <td>
+                <select name="ocenaOd">
+                    <option value="NULA"></option>
+                    <option value="JEDAN">1</option>
+                    <option value="DVA">2</option>
+                    <option value="TRI">3</option>
+                    <option value="CETIRI">4</option>
+                    <option value="PET">5</option>
+                </select>
+            </td>
+            <td>
+                <select name="ocenaDo">
+                    <option value="NULA"></option>
+                    <option value="JEDAN">1</option>
+                    <option value="DVA">2</option>
+                    <option value="TRI">3</option>
+                    <option value="CETIRI">4</option>
+                    <option value="PET">5</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Pretraga po ceni:</td>
+            <td><input type="text" name="cenaOd"></td>
+            <td><input type="text" name="cenaDo"></td>
+        </tr>
+        <tr>
+            <td colspan="3" align="center"><input type="submit" value="Pretraga"></td>
+        </tr>
+    </table>
+    <input type="hidden" name="korisnickoImeVozac" value="@Model.korisnickoIme">
+</form>
