@@ -75,7 +75,7 @@
 
         <!-- Tab content -->
         <div id="NaruciVoznju" class="tabcontent">
-            <form action="/Home/PoruciVoznju">
+            <form action="/Home/PoruciVoznju" method="post">
                 <table>
                     <tr>
                         <td>Korisnicko ime: </td>
@@ -107,7 +107,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center"><input type="submit" value="Posalji" onclick="alert('Voznja je porucena')"></td>
+                        <td colspan="2" align="center"><input type="submit" value="Posalji"></td>
                     </tr>
                 </table>
             </form>
@@ -151,7 +151,7 @@
         </div>
 
         <div id="Izmena" class="tabcontent">
-            <form action="/Home/IzmeniPodatke">
+            <form action="/Home/IzmeniPodatke" method="post">
                 <table>
                     <tr>
                         <td>Korisnicko ime:</td>
@@ -222,12 +222,12 @@
                     
                             @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
                             {
-                                <td>@Html.ActionLink("Izmeni", "MusterijaMenjaVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
-                                <td>@Html.ActionLink("Otkazi", "MusterijaOtkazujeVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
+                                <td>@Html.ActionLink("Izmeni", "MusterijaMenjaVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString(), funkcija = "izmeni" }) </td>
+                                <td>@Html.ActionLink("Otkazi", "MusterijaOtkazujeVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString(), funkcija = "otkazi" }) </td>
                             }
                             @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.USPESNA)
                             {
-                                <td>@Html.ActionLink("Komentar", "KomentarUspesno", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString() }) </td>
+                                <td>@Html.ActionLink("Komentar", "KomentarUspesno", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString(), funkcija = "komentar" }) </td>
                             }
                         </tr>
                         }
@@ -236,7 +236,7 @@
                 }
             </table>
 
-            <form action="/Home/Filtriranje">
+            <form action="/Home/Filtriranje" method="post">
                 <table>
                     <tr>
                         <td>Filtriraj:</td>
@@ -258,7 +258,7 @@
                 <input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme">
             </form>
 
-            <form action="/Home/Sortiranje">
+            <form action="/Home/Sortiranje" method="post">
                 <table>
                     <tr>
                         <td>Sortiraj po:</td>
@@ -274,7 +274,7 @@
                 <input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme">
             </form>
 
-            <form action="/Home/Pretraga">
+            <form action="/Home/Pretraga" method="post">
                 <table>
                     <tr>
                         <td>Pretraga po datumu:</td>

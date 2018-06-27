@@ -1,9 +1,15 @@
-﻿
+﻿@model TaxiSluzba.Models.Odgovor
 @{
     ViewBag.Title = "Greska";
 }
 
-<h2>Korisnik sa tim korisnickim imenom (ne)postoji! Pokusajte ponovo...</h2>
-@Html.ActionLink("Nazad", "HomePage")</br>
-@Html.ActionLink("Nazad na dispecera", "Dispecer")
 
+
+<html>
+    <body>
+        <form action="/Home/Preusmeri" method="post">
+            <h2>@Model.response</h2>
+            <input type="submit" value="Nazad">
+        </form>
+    </body>
+</html>

@@ -155,6 +155,7 @@
     <Compile Include="Models\Lokacija.cs" />
     <Compile Include="Models\Musterija.cs" />
     <Compile Include="Models\OcenaVoznje.cs" />
+    <Compile Include="Models\Odgovor.cs" />
     <Compile Include="Models\Pol.cs" />
     <Compile Include="Models\Registration.cs" />
     <Compile Include="Models\StatusVoznje.cs" />

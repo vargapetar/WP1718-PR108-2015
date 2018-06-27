@@ -71,7 +71,7 @@
 
     <!-- Tab content -->
     <div id="KreirajVozaca" class="tabcontent">
-        <form action="/Home/KreirajVozaca">
+        <form action="/Home/KreirajVozaca" method="post">
             <table>
                 <tr>
                     <td>Korisnicko ime:</td>
@@ -142,7 +142,7 @@
     </div>
 
     <div id="KreirajVoznju" class="tabcontent">
-        <form action="/Home/KreirajVoznju">
+        <form action="/Home/KreirajVoznju" method="post">
             <table>
                 <tr>
                     <td>Ulica: </td>
@@ -192,7 +192,7 @@
     <div id="DodeliVoznju" class="tabcontent">
         <h1> Dodela voznje </h1>
         <h4> Spisak voznji na cekanju</h4>
-        <form action="/Home/DodeliVozacaVoznji">
+        <form action="/Home/DodeliVozacaVoznji" method="post">
             <select name="voznja">
                 @{
                     foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.voznjeNaCekanju.Values)
@@ -238,7 +238,7 @@
             }
         </table>
 
-        <form action="/Home/Filtriranje">
+        <form action="/Home/Filtriranje" method="post">
                 <table>
                     <tr>
                         <td>Filtriraj:</td>
@@ -259,7 +259,7 @@
                 </table>
             </form>
 
-            <form action="/Home/Sortiranje">
+            <form action="/Home/Sortiranje" method="post">
                 <table>
                     <tr>
                         <td>Sortiraj po:</td>
@@ -274,7 +274,7 @@
                 </table>
             </form>
 
-            <form action="/Home/PretragaDispecer">
+            <form action="/Home/PretragaDispecer" method="post">
                 <table>
                     <tr>
                         <td>Pretraga po datumu:</td>

@@ -5,7 +5,7 @@
 
 <h2>Vozac</h2>
 <h4>Voznja pristigla od dispecera</h4></br>
-<form action="/Home/PocniSaVoznjom">
+<form action="/Home/PocniSaVoznjom" method="post">
     @{ foreach (TaxiSluzba.Models.Voznja voz in TaxiSluzba.Models.Database.vozaci[Model.korisnickoIme].voznje)
         {
             if (voz.statusVoznje == TaxiSluzba.Models.StatusVoznje.OBRADJENA || voz.statusVoznje == TaxiSluzba.Models.StatusVoznje.FORMIRANA)
@@ -39,7 +39,7 @@
 </form><hr>
 
 <h4>Lokacija:</h4>
-<form action="/Home/LokacijaTaksiste">
+<form action="/Home/LokacijaTaksiste" method="post">
     <table>
         <tr>
             <td>Ulica:</td>
@@ -74,7 +74,7 @@
 </form><hr>
 
 <h2>Preuzimanje voznje</h2>
-<form action="/Home/PreuzimanjeVoznje">
+<form action="/Home/PreuzimanjeVoznje" method="post">
     <select name="voznja">
         @{
             foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.voznjeNaCekanju.Values)
@@ -110,7 +110,7 @@
     }
 </table>
 
-<form action="/Home/Filtriranje">
+<form action="/Home/Filtriranje" method="post">
     <table>
         <tr>
             <td>Filtriraj:</td>
@@ -132,7 +132,7 @@
     <input type="hidden" name="korisnickoImeVozac" value="@Model.korisnickoIme">
 </form>
 
-<form action="/Home/Sortiranje">
+<form action="/Home/Sortiranje" method="post">
     <table>
         <tr>
             <td>Sortiraj po:</td>
@@ -148,7 +148,7 @@
     <input type="hidden" name="korisnickoImeVozac" value="@Model.korisnickoIme">
 </form>
 
-<form action="/Home/PretragaVozac">
+<form action="/Home/PretragaVozac" method="post">
     <table>
         <tr>
             <td>Pretraga po datumu:</td>

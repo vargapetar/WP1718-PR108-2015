@@ -41,6 +41,7 @@ namespace TaxiSluzba.Controllers
             }
         }
 
+        [HttpPost]
         public ActionResult Logovanje(string user, string pass)
         {
             Korisnik k = (Korisnik)Session["korisnikUser"];
@@ -91,8 +92,48 @@ namespace TaxiSluzba.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult Preusmeri()
+        {
+            Korisnik k123 = (Korisnik)Session["korisnikUser"];
+
+            if (k123 == null)
+            {
+                k123 = new Korisnik();
+                Session["korisnikUser"] = k123;
+            }
+
+            foreach (Korisnik kor in Database.registrovaniKorisnici.Values)
+            {
+                if (kor.korisnickoIme == k123.korisnickoIme && kor.uloga == Uloga.MUSTERIJA)
+                {
+                    return View("Musterija", k123);
+                }
+            }
+
+            foreach (Korisnik kor in Database.registrovaniKorisnici.Values)
+            {
+                if (kor.korisnickoIme == k123.korisnickoIme && kor.uloga == Uloga.DISPECER)
+                {
+                    return View("Dispecer");
+                }
+            }
+
+            foreach (Korisnik kor in Database.registrovaniKorisnici.Values)
+            {
+                if (kor.korisnickoIme == k123.korisnickoIme && kor.uloga == Uloga.VOZAC)
+                {
+                    return View("Vozac", Database.vozaci[k123.korisnickoIme]);
+                }
+            }
+
+            Odgovor o = new Odgovor("Nesto ne valja!");
+            return View("Greska", o);
+        }
+
         #region
         //izmena podataka kod musterije
+        [HttpPost]
         public ActionResult IzmeniPodatke(string user, string pass, string ime, string prezime, string pol, string jmbg, string telefon, string email)
         {
             Korisnik k = (Korisnik)Session["korisnikUser"];
@@ -122,14 +163,17 @@ namespace TaxiSluzba.Controllers
                     Database.registrovaniKorisnici[user].telefon = telefon;
                     Database.registrovaniKorisnici[user].email = email;
 
-                    return View("Musterija", Database.registrovaniKorisnici[user]);
+                    Odgovor odg = new Odgovor("Podaci su uspesno izmenjeni.");
+                    return View("Greska", odg);
                 }
 
             }
 
+            Odgovor o = new Odgovor("Podaci nisu izmenjeni, doslo je do greske!");
             return View("Greska"); //smisli gresku
         }
 
+        [HttpPost]
         public ActionResult PoruciVoznju(string korisnickoIme, string ulica, string broj, string grad, string poBroj, string tipPrevoza)
         {
             Korisnik k = (Korisnik)Session["korisnikUser"];
@@ -161,14 +205,17 @@ namespace TaxiSluzba.Controllers
                     Database.registrovaniKorisnici[korisnickoIme].voznje.Add(v);
                     Database.voznjeNaCekanju.Add(v.datumVreme.ToString(), v);
 
-                    return View("Musterija", (Korisnik)m);
+                    Odgovor odg = new Odgovor("Voznja je uspesno porucena!");
+                    return View("Greska", odg);
                 }
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Voznja nije narucena, doslo je do greske!");
+            return View("Greska", o);
         }
 
+        [HttpPost]
         public ActionResult MusterijaMenjaVoznju(string korisnickoIme, string datumVoznje)
         {
             Korisnik k = (Korisnik)Session["korisnikUser"];
@@ -199,9 +246,11 @@ namespace TaxiSluzba.Controllers
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Voznja se ne moze promeniti, doslo je do greske!");
+            return View("Greska", o);
         }
 
+        [HttpPost]
         public ActionResult IzmenaVoznje(string ulica, string broj, string grad, string poBroj, string tipAuto, string userKorisnika, string datumVoznje)
         {
             Korisnik k = (Korisnik)Session["korisnikUser"];
@@ -234,14 +283,17 @@ namespace TaxiSluzba.Controllers
                             AzurirajVoznju(v);
                         }
                     }
-                    return View("Musterija", Database.registrovaniKorisnici[userKorisnika]);
+                    Odgovor odg = new Odgovor("Voznja je uspesno izmenjena.");
+                    return View("Greska", odg);
                 }
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Voznja se ne moze izmeniti, doslo je do greske!");
+            return View("Greska", o);
         }
 
+        [HttpPost]
         public ActionResult MusterijaOtkazujeVoznju(string korisnickoIme, string datumVoznje)
         {
             Korisnik k = (Korisnik)Session["korisnikUser"];
@@ -273,9 +325,11 @@ namespace TaxiSluzba.Controllers
 
             }
 
+            Odgovor o = new Odgovor("Nemoguce je otkazati voznju, doslo je do greske!");
             return View("Greska");
         }
 
+        [HttpPost]
         public ActionResult KomentarMusterija(string comment, string datumVoznje, string userKorisnika, string ocena)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -321,14 +375,17 @@ namespace TaxiSluzba.Controllers
                         }
                     }
 
-                    return View("Musterija", Database.registrovaniKorisnici[userKorisnika]);
+                    Odgovor odg = new Odgovor("Komentar uspesno postavljen");
+                    return View("Greska", odg);
                 }
 
             }
 
+            Odgovor o = new Odgovor("Nemoguce je ostaviti komentar, doslo je do greske!");
             return View("Greska");
         }
 
+        [HttpPost]
         public ActionResult KomentarUspesno(string datumVoznje, string korisnickoIme)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -359,11 +416,13 @@ namespace TaxiSluzba.Controllers
 
             }
 
+            Odgovor o = new Odgovor("Nemoguce je ostaviti komentar, doslo je do greske!");
             return View("Greska");
         }
         #endregion
 
         #region
+        [HttpPost]
         public ActionResult KreirajVozaca(string user, string pass, string ime, string prezime, string pol, string jmbg, string telefon, string email, string godisteAuto, string regAuto, string brAuto, string tipAuto)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -399,14 +458,17 @@ namespace TaxiSluzba.Controllers
                     Database.registrovaniKorisnici.Add(k.korisnickoIme, k);
                     Database.slobodniVozaci.Add(v.korisnickoIme, v);
 
-                    return View("Dispecer");
+                    Odgovor o = new Odgovor("Vozac uspesno kreiran.");
+                    return View("Greska", o);
                 }
 
             }
 
+            Odgovor odg = new Odgovor("Vozac nije kreiran, doslo je do greske!");
             return View("Greska");
         }
 
+        [HttpPost]
         public ActionResult KreirajVoznju(string ulica, string broj, string grad, string poBroj, string tipPrevoza, string izabraniVozac)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -444,14 +506,17 @@ namespace TaxiSluzba.Controllers
                     AzurirajVoznju(v);
                     Database.vozaci[izabraniVozac].voznje.Add(v);
 
-                    return View("Dispecer");
+                    Odgovor odg = new Odgovor("Voznja uspesno kreirana.");
+                    return View("Greska", odg);
                 }
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Voznja nije kreirana, doslo je do greske!");
+            return View("Greska", o);
         }
 
+        [HttpPost]
         public ActionResult DodeliVozacaVoznji(string voznja, string vozac)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -480,14 +545,17 @@ namespace TaxiSluzba.Controllers
                     //
                     AzurirajVoznju(retVoznja);
 
-                    return View("Dispecer");
+                    Odgovor odg = new Odgovor("Voznja uspesno kreirana.");
+                    return View("Greska", odg);
                 }
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Voznja nije kreirana, doslo je do greske!");
+            return View("Greska", o);
         }
 
+        [HttpPost]
         public ActionResult DetaljiVoznje(string datumVoznje, string vozac)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -538,11 +606,13 @@ namespace TaxiSluzba.Controllers
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Nemoguce je otvoriti detalje voznje, doslo je do greske!");
+            return View("Greska", o);
         }
         #endregion
 
         #region
+        [HttpPost]
         public ActionResult PocniSaVoznjom(string datumVoznje, string vozac)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -575,9 +645,11 @@ namespace TaxiSluzba.Controllers
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Nemoguce je zapoceti sa voznjom, doslo je do greske!");
+            return View("Greska", o);
         }
 
+        [HttpPost]
         public ActionResult UspesnaVoznja(string datumVoznje, string vozac, string musterija)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -633,9 +705,11 @@ namespace TaxiSluzba.Controllers
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Doslo je do greske!");
+            return View("Greska", o);
         }
 
+        [HttpPost]
         public ActionResult NeuspesnaVoznja(string datumVoznje, string musterija)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -679,9 +753,11 @@ namespace TaxiSluzba.Controllers
 
             }
 
+            Odgovor o = new Odgovor("Nemoguce je ostaviti komentar, doslo je do greske!");
             return View("Greska");
         }
 
+        [HttpPost]
         public ActionResult KomentarVozac(string comment, string datumVoznje, string userKorisnika)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -735,14 +811,17 @@ namespace TaxiSluzba.Controllers
                         }
                     }
 
-                    return View("Vozac", vo);
+                    Odgovor odg = new Odgovor("Voznja je neuspesno zavrsena.");
+                    return View("Greska", odg);
                 }
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Nemoguce postaviti komentar, doslo je do greske!");
+            return View("Greska", o);
         }
 
+        [HttpPost]
         public ActionResult ZavrsiVoznju(string ulica, string broj, string grad, string poBroj, string iznos, string datumVoznje, string musterija, string vozac)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -790,14 +869,17 @@ namespace TaxiSluzba.Controllers
 
                     Database.slobodniVozaci.Add(vozac, Database.vozaci[vozac]);
 
-                    return View("Vozac", Database.vozaci[vozac]);
+                    Odgovor odg = new Odgovor("Voznja uspesno zavrsena.");
+                    return View("Greska", odg);
                 }
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Voznja nije zavrsena, doslo je do greske!");
+            return View("Greska", o);
         }
 
+        [HttpPost]
         public ActionResult LokacijaTaksiste(string vozac, string ulica, string broj, string grad, string poBroj)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -819,14 +901,17 @@ namespace TaxiSluzba.Controllers
                     if (Database.slobodniVozaci.ContainsKey(vozac))
                         Database.slobodniVozaci[vozac].lokacija = l;
 
-                    return View("Vozac", Database.vozaci[vozac]);
+                    Odgovor odg = new Odgovor("Lokacija uspesno dodata.");
+                    return View("Greska", odg);
                 }
 
             }
 
-            return View("Greska");
+            Odgovor o = new Odgovor("Nemoguce dodati lokaciju, doslo je do greske!");
+            return View("Greska", o);
         }
 
+        [HttpPost]
         public ActionResult PreuzimanjeVoznje(string voznja, string vozac)
         {
             Korisnik k123 = (Korisnik)Session["korisnikUser"];
@@ -872,6 +957,7 @@ namespace TaxiSluzba.Controllers
 
             }
 
+            Odgovor o = new Odgovor("Nemoguce preuzeti voznju, doslo je do greske");
             return View("Greska");
         }
         #endregion
@@ -888,6 +974,7 @@ namespace TaxiSluzba.Controllers
                 Database.sveVoznje.Add(voznja.datumVreme.ToString(), retVoznja);
         }
 
+        [HttpPost]
         public ActionResult Filtriranje(string statusVoznje, string korisnickoIme, string korisnickoImeVozac)
         {
             List<Voznja> voznje = new List<Voznja>();
@@ -928,6 +1015,7 @@ namespace TaxiSluzba.Controllers
             return View("RezultatAkcije", voznje);
         }
 
+        [HttpPost]
         public ActionResult Sortiranje(string sortirajPo, string korisnickoIme, string korisnickoImeVozac)
         {
             List<Voznja> voznje = new List<Voznja>();
@@ -983,6 +1071,7 @@ namespace TaxiSluzba.Controllers
             return View("RezultatAkcije", sortirano);
         }
 
+        [HttpPost]
         public ActionResult Pretraga(string datumOd, string datumDo, string ocenaOd, string ocenaDo, string cenaOd, string cenaDo, string korisnickoIme)
         {
             List<Voznja> voznje = new List<Voznja>();
@@ -1179,6 +1268,7 @@ namespace TaxiSluzba.Controllers
             return View("RezultatAkcije", voznje);
         }
 
+        [HttpPost]
         public ActionResult PretragaVozac(string datumOd, string datumDo, string ocenaOd, string ocenaDo, string cenaOd, string cenaDo, string korisnickoIme)
         {
             List<Voznja> voznje = new List<Voznja>();
@@ -1395,6 +1485,7 @@ namespace TaxiSluzba.Controllers
             return View("RezultatAkcije", voznje);
         }
 
+        [HttpPost]
         public ActionResult PretragaDispecer(string datumOd, string datumDo, string ocenaOd, string ocenaDo, string cenaOd, string cenaDo, string imeVozaca, string prezimeVozaca, string imeMusterije, string prezimeMusterije)
         {
             List<Voznja> voznje = new List<Voznja>();
