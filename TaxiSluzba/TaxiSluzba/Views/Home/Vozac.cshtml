@@ -105,7 +105,7 @@
             <td>@v.datumVreme.ToString()</td>
             <td align="center">@v.dispecer.korisnickoIme</td>
             <td>@v.statusVoznje.ToString()</td>
-            <td>@Html.ActionLink("Detaljnije", "DetaljiVoznje", new { datumVoznje = v.datumVreme.ToString(), vozac = v.vozac.korisnickoIme })</td>
+            <td><form action="/Home/DetaljiVoznje" method="post"><input type="submit" value="Detalji"><input type="hidden" name="vozac" value="@v.vozac.korisnickoIme"><input type="hidden" name="datumVoznje" value="@v.datumVreme.ToString()"></form></td>
         </tr>
     }
 </table>

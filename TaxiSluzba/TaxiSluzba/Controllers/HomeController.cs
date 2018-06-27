@@ -568,40 +568,43 @@ namespace TaxiSluzba.Controllers
 
             foreach (Korisnik kor in Database.registrovaniKorisnici.Values)
             {
-                if (kor.korisnickoIme == k123.korisnickoIme && kor.uloga == Uloga.DISPECER)
+                if (kor.korisnickoIme == k123.korisnickoIme)
                 {
-                    Voznja vo = new Voznja();
-                    Korisnik k = new Korisnik("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
-                    Musterija m = new Musterija("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
-                    Adresa a = new Adresa("-", "-", "-", "-");
-                    Lokacija l = new Lokacija(1, 1, a);
-
-                    foreach (Voznja v in Database.vozaci[vozac].voznje)
+                    if (kor.uloga == Uloga.VOZAC || kor.uloga == Uloga.DISPECER)
                     {
-                        if (v.datumVreme.ToString() == datumVoznje)
+                        Voznja vo = new Voznja();
+                        Korisnik k = new Korisnik("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
+                        Musterija m = new Musterija("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
+                        Adresa a = new Adresa("-", "-", "-", "-");
+                        Lokacija l = new Lokacija(1, 1, a);
+
+                        foreach (Voznja v in Database.vozaci[vozac].voznje)
                         {
-                            vo = v;
+                            if (v.datumVreme.ToString() == datumVoznje)
+                            {
+                                vo = v;
+                            }
                         }
+
+                        if (vo.dispecer == null)
+                            vo.dispecer = new Dispecer("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
+
+                        if (vo.iznos == null)
+                            vo.iznos = "-";
+
+                        if (vo.komentar == null)
+                            vo.komentar = new Komentar("-", DateTime.Now, k, vo, OcenaVoznje.NULA);
+
+                        if (vo.musterija == null)
+                            vo.musterija = m;
+
+                        if (vo.odrediste == null)
+                            vo.odrediste = l;
+
+                        //
+                        AzurirajVoznju(vo);
+                        return View("DetaljiVoznje", vo);
                     }
-
-                    if (vo.dispecer == null)
-                        vo.dispecer = new Dispecer("-", "-", "-", "-", Pol.MUSKI, "-", "-", "-");
-
-                    if (vo.iznos == null)
-                        vo.iznos = "-";
-
-                    if (vo.komentar == null)
-                        vo.komentar = new Komentar("-", DateTime.Now, k, vo, OcenaVoznje.NULA);
-
-                    if (vo.musterija == null)
-                        vo.musterija = m;
-
-                    if (vo.odrediste == null)
-                        vo.odrediste = l;
-
-                    //
-                    AzurirajVoznju(vo);
-                    return View("DetaljiVoznje", vo);
                 }
 
             }

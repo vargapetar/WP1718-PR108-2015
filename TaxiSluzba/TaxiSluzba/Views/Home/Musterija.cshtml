@@ -222,12 +222,12 @@
                     
                             @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
                             {
-                                <td>@Html.ActionLink("Izmeni", "MusterijaMenjaVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString(), funkcija = "izmeni" }) </td>
-                                <td>@Html.ActionLink("Otkazi", "MusterijaOtkazujeVoznju", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString(), funkcija = "otkazi" }) </td>
+                                <td><form action="/Home/MusterijaMenjaVoznju" method="post"><input type="submit" value="Izmeni"><input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme"><input type="hidden" name="datumVoznje" value="@v.datumVreme.ToString()"></form></td>
+                                <td><form action="/Home/MusterijaOtkazujeVoznju" method="post"><input type="submit" value="Otkazi"><input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme"><input type="hidden" name="datumVoznje" value="@v.datumVreme.ToString()"></form></td>
                             }
                             @if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.USPESNA)
                             {
-                                <td>@Html.ActionLink("Komentar", "KomentarUspesno", new { korisnickoIme = Model.korisnickoIme, datumVoznje = v.datumVreme.ToString(), funkcija = "komentar" }) </td>
+                                <td><form action="/Home/KomentarUspesno" method="post"><input type="submit" value="Komentar"><input type="hidden" name="korisnickoIme" value="@Model.korisnickoIme"><input type="hidden" name="datumVoznje" value="@v.datumVreme.ToString()"></form></td>
                             }
                         </tr>
                         }
