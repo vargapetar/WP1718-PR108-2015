@@ -78,12 +78,16 @@ namespace TaxiSluzba.Controllers
                         return View("Musterija", m);
                     }
                 }
+                else
+                {
+                    return View("HomePage");
+                }
 
                 return View("Greska"); //napraviti view za pogresan unos lozinke!!!!!
             }
             else
             {
-                return View("Greska");
+                return View("HomePage");
             }
         }
 
