@@ -1,5 +1,8 @@
 ﻿<html>
     <head>
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
         <style>
             .split {
                 height: 100%;
@@ -43,25 +46,24 @@
                 <table>
                     <tr>
                         <td>Korisnicko ime:</td>
-                        <td><input type="text" name="user"></td>
+                        <td><input type="text" data-val="true" data-val-length="Minimum 1 karakter" data-val-length-max="20" data-val-length-min="1" data-val-required="*" name="user"> <span class="text-danger field-validation-error" data-valmsg-for="user" data-valmsg-replace="true"></span></td>
                     </tr>
                     <tr>
                         <td>Lozinka: </td>
-                        <td><input type="password" name="pass"></td>
+                        <td><input type="password" data-val="true" data-val-length="Minimum 3 karaktera" data-val-length-max="20" data-val-length-min="3" data-val-required="*" name="pass"><span class="text-danger field-validation-error" data-valmsg-for="pass" data-valmsg-replace="true"></span></td>
                     </tr>
                     <tr>
                         <td>Ime: </td>
-                        <td><input type="text" name="ime"></td>
+                        <td><input type="text" data-val="true" data-val-length="Minimum 1 karakter" data-val-length-max="20" data-val-length-min="1" data-val-required="*" name="ime"><span class="text-danger field-validation-error" data-valmsg-for="ime" data-valmsg-replace="true"></span></td>
                     </tr>
                     <tr>
                         <td>Prezime: </td>
-                        <td><input type="text" name="prezime"></td>
+                        <td><input type="text" data-val="true" data-val-length="Minimum 1 karakter" data-val-length-max="20" data-val-length-min="1" data-val-required="*" name="prezime"><span class="text-danger field-validation-error" data-valmsg-for="prezime" data-valmsg-replace="true"></span></td>
                     </tr>
                     <tr>
                         <td>Pol: </td>
                         <td align="left">
                             <select name="pol">
-                                <option></option>
                                 <option value="MUSKI">Muski</option>
                                 <option value="ZENSKI">Zenski</option>
                             </select>
@@ -69,15 +71,15 @@
                     </tr>
                     <tr>
                         <td>JMBG: </td>
-                        <td><input type="text" name="jmbg"></td>
+                        <td><input type="text" data-val="true" data-val-length="Minimum 13 karakter" data-val-length-max="20" data-val-length-min="13" data-val-required="*" name="jmbg"><span class="text-danger field-validation-error" data-valmsg-for="jmbg" data-valmsg-replace="true"></span></td>
                     </tr>
                     <tr>
                         <td>Kontakt telefon: </td>
-                        <td><input type="text" name="telefon"></td>
+                        <td><input type="text" data-val="true" data-val-length="Minimum 9 karaktera" data-val-length-max="20" data-val-length-min="9" data-val-required="*" name="telefon"><span class="text-danger field-validation-error" data-valmsg-for="telefon" data-valmsg-replace="true"></span></td>
                     </tr>
                     <tr>
                         <td>Email: </td>
-                        <td><input type="text" name="email"></td>
+                        <td><input type="text" data-val="true" data-val-length="Minimum 5 karaktera" data-val-length-max="20" data-val-length-min="5" data-val-required="*" name="email"><span class="text-danger field-validation-error" data-valmsg-for="email" data-valmsg-replace="true"></span></td>
                     </tr>
                     <tr>
                         <td colspan="2" align="center"><input type="submit" value="Registruj se"></td>
@@ -94,11 +96,11 @@
                 <table>
                     <tr>
                         <td>Korisnicko ime:</td>
-                        <td><input type="text" name="user"></td>
+                        <td><input type="text" data-val="true" data-val-length="Minimum 1 karakter" data-val-length-max="20" data-val-length-min="1" data-val-required="*"  name="user"><span class="text-danger field-validation-error" data-valmsg-for="user" data-valmsg-replace="true"></span></td>
                     </tr>
                     <tr>
                         <td>Lozinka: </td>
-                        <td><input type="password" name="pass"></td>
+                        <td><input type="password" data-val="true" data-val-length="Minimum 3 karaktera" data-val-length-max="20" data-val-length-min="3" data-val-required="*"  name="pass"><span class="text-danger field-validation-error" data-valmsg-for="pass" data-valmsg-replace="true"></span></td>
                     </tr>
                     <tr>
                         <td colspan="2" align="center"><input type="submit" value="Log in"></td>

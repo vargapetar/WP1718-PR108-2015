@@ -1,5 +1,8 @@
 ﻿<html>
 <head>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <style>
         .tab {
             overflow: hidden;
@@ -38,26 +41,26 @@
     </style>
 
     <script>
-            function openCity(evt, cityName) {
-                // Declare all variables
-                var i, tabcontent, tablinks;
+        function openCity(evt, cityName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
 
-                // Get all elements with class="tabcontent" and hide them
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-
-                // Get all elements with class="tablinks" and remove the class "active"
-                tablinks = document.getElementsByClassName("tablinks");
-                for (i = 0; i < tablinks.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" active", "");
-                }
-
-                // Show the current tab, and add an "active" class to the button that opened the tab
-                document.getElementById(cityName).style.display = "block";
-                evt.currentTarget.className += " active";
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
             }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
     </script>
 </head>
 
@@ -75,19 +78,19 @@
             <table>
                 <tr>
                     <td>Korisnicko ime:</td>
-                    <td><input type="text" name="user"></td>
+                    <td><input type="text" data-val="true" data-val-length="Najmanje 1 karakter" data-val-length-max="20" data-val-length-min="1" data-val-required="*" name="user"><span class="text-danger field-validation-error" data-valmsg-for="user" data-valmsg-replace="true"></td>
                 </tr>
                 <tr>
                     <td>Lozinka: </td>
-                    <td><input type="password" name="pass"></td>
+                    <td><input type="password" data-val="true" data-val-length="Najmanje 3 karaktera" data-val-length-max="20" data-val-length-min="3" data-val-required="*" name="pass"><span class="text-danger field-validation-error" data-valmsg-for="pass" data-valmsg-replace="true"></td>
                 </tr>
                 <tr>
                     <td>Ime: </td>
-                    <td><input type="text" name="ime"></td>
+                    <td><input type="text" data-val="true" data-val-length="Najmanje 1 karakter" data-val-length-max="20" data-val-length-min="1" data-val-required="*" name="ime"><span class="text-danger field-validation-error" data-valmsg-for="ime" data-valmsg-replace="true"></td>
                 </tr>
                 <tr>
                     <td>Prezime: </td>
-                    <td><input type="text" name="prezime"></td>
+                    <td><input type="text" data-val="true" data-val-length="Najmanje 1 karakter" data-val-length-max="20" data-val-length-min="1" data-val-required="*" name="prezime"><span class="text-danger field-validation-error" data-valmsg-for="prezime" data-valmsg-replace="true"></td>
                 </tr>
                 <tr>
                     <td>Pol: </td>
@@ -100,27 +103,27 @@
                 </tr>
                 <tr>
                     <td>JMBG: </td>
-                    <td><input type="text" name="jmbg"></td>
+                    <td><input type="text"data-val="true" data-val-length="Najmanje 13 karaktera" data-val-length-max="20" data-val-length-min="13" data-val-required="*"  name="jmbg"><span class="text-danger field-validation-error" data-valmsg-for="jmbg" data-valmsg-replace="true"></td>
                 </tr>
                 <tr>
                     <td>Kontakt telefon: </td>
-                    <td><input type="text" name="telefon"></td>
+                    <td><input type="text" data-val="true" data-val-length="Najmanje 9 karaktera" data-val-length-max="20" data-val-length-min="9" data-val-required="*" name="telefon"><span class="text-danger field-validation-error" data-valmsg-for="telefon" data-valmsg-replace="true"></td>
                 </tr>
                 <tr>
                     <td>Email: </td>
-                    <td><input type="text" name="email"></td>
+                    <td><input type="text" data-val="true" data-val-length="Najmanje 5 karaktera" data-val-length-max="20" data-val-length-min="5" data-val-required="*" name="email"><span class="text-danger field-validation-error" data-valmsg-for="email" data-valmsg-replace="true"></td>
                 </tr>
                 <tr>
                     <td>Godiste automobila: </td>
-                    <td><input type="text" name="godisteAuto"></td>
+                    <td><input type="text" data-val="true" data-val-length="Najmanje 4 karaktera" data-val-length-max="20" data-val-length-min="4" data-val-required="*" name="godisteAuto"><span class="text-danger field-validation-error" data-valmsg-for="godisteAuto" data-valmsg-replace="true"></td>
                 </tr>
                 <tr>
                     <td>Registracija automobila: </td>
-                    <td><input type="text" name="regAuto"></td>
+                    <td><input type="text" data-val="true" data-val-length="Najmanje 3 karaktera" data-val-length-max="20" data-val-length-min="3" data-val-required="*" name="regAuto"><span class="text-danger field-validation-error" data-valmsg-for="regAuto" data-valmsg-replace="true"></td>
                 </tr>
                 <tr>
                     <td>Broj automobila: </td>
-                    <td><input type="text" name="brAuto"></td>
+                    <td><input type="text" data-val="true" data-val-length="Najmanje 1 karaktera" data-val-length-max="20" data-val-length-min="1" data-val-required="*" name="brAuto"><span class="text-danger field-validation-error" data-valmsg-for="brAuto" data-valmsg-replace="true"></td>
                 </tr>
                 <tr>
                     <td>Tip automobila: </td>
@@ -132,7 +135,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" align="center"><input type="submit" onclick="alert('Vozac je uspesno dodat!')" value="Kreiraj vozaca"></td>
+                    <td colspan="2" align="center"><input type="submit" value="Kreiraj vozaca"></td>
                 </tr>
             </table>
         </form>

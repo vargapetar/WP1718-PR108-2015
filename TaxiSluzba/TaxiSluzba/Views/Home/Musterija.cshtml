@@ -2,6 +2,9 @@
 
 <html>
 <head>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <style>
         .tab {
             overflow: hidden;
@@ -83,19 +86,19 @@
                     </tr>
                     <tr>
                         <td>Ulica: </td>
-                        <td><input type="text" name="ulica"></td>
+                        <td><input type="text" data-val="true" data-val-length="Najmanje 4 karaktera" data-val-length-max="20" data-val-length-min="4" data-val-required="*" name="ulica"><span class="text-danger field-validation-error" data-valmsg-for="ulica" data-valmsg-replace="true"></td>
                     </tr>
                     <tr>
                         <td>Broj: </td>
-                        <td><input type="text" name="broj"></td>
+                        <td><input type="text" data-val="true" data-val-length="Najmanje 1 karaktera" data-val-length-max="20" data-val-length-min="1" data-val-required="*" name="broj"><span class="text-danger field-validation-error" data-valmsg-for="broj" data-valmsg-replace="true"></td>
                     </tr>
                     <tr>
                         <td>Grad: </td>
-                        <td><input type="text" name="grad"></td>
+                        <td><input type="text" data-val="true" data-val-length="Najmanje 3 karaktera" data-val-length-max="20" data-val-length-min="3" data-val-required="*" name="grad"><span class="text-danger field-validation-error" data-valmsg-for="grad" data-valmsg-replace="true"></td>
                     </tr>
                     <tr>
                         <td>Postanski broj: </td>
-                        <td><input type="text" name="poBroj"></td>
+                        <td><input type="text" data-val="true" data-val-length="Najmanje 5 karaktera" data-val-length-max="20" data-val-length-min="5" data-val-required="*" name="poBroj"><span class="text-danger field-validation-error" data-valmsg-for="poBroj" data-valmsg-replace="true"></td>
                     </tr>
                     <tr>
                         <td>Tip prevoza: </td>
