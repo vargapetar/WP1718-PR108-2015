@@ -208,7 +208,7 @@
                     <td>Ocena</td>
                 </tr>
                 @{
-                    foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.sveVoznje.Values)
+                    foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.registrovaniKorisnici[Model.korisnickoIme].voznje)
                     {
                         if(Model.korisnickoIme == v.musterija.korisnickoIme)
                         {

@@ -16,47 +16,136 @@ namespace TaxiSluzba.Models
         public static Dictionary<string, Voznja> voznjeNepoznatihDisp = new Dictionary<string, Voznja>(); //kljuce je vreme voznje
         public static Dictionary<string, Voznja> sveVoznje = new Dictionary<string, Voznja>(); //sve moguce voznje u sistemu, kljuc je datum voznje
 
-        public static void UpisiUTXT(Registration r)
+        //baza
+        public static void UpisiVoznje()
         {
+            string ret = "";
             string pom = "";
 
-            if (File.Exists(@"C:\WEBProjekat\RegistrovaniKorisnici.txt"))
+            if (File.Exists(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\SveVoznje.txt"))
             {
-                StreamReader sr = new StreamReader(@"C:\WEBProjekat\RegistrovaniKorisnici.txt");
-                pom = sr.ReadToEnd();
+                StreamReader sr = new StreamReader(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\SveVoznje.txt");
+
+                //while((pom = sr.ReadLine()) != null)
+                //{
+                //    ret += pom + "\n";
+                //}
+
+                foreach (Voznja v in sveVoznje.Values)
+                {
+                    ret += string.Format(v.datumVreme.ToString() + "#" + v.dispecer.korisnickoIme + "#" + v.iznos + "#" + v.komentar.opis + "#" +
+                                        v.komentar.ocenaVoznje.ToString() + "#" + v.komentar.datumVreme.ToString() + "#" + v.lokacijaZaTaksi.Adress.Ulica + "#" +
+                                        v.lokacijaZaTaksi.Adress.BrojUlice + "#" + v.lokacijaZaTaksi.Adress.Grad + "#" + v.lokacijaZaTaksi.Adress.PozivniBroj + "#" +
+                                        v.musterija.korisnickoIme + "#" + v.odrediste.Adress.Ulica + "#" +
+                                        v.odrediste.Adress.BrojUlice + "#" + v.odrediste.Adress.Grad + "#" + v.odrediste.Adress.PozivniBroj + "#" +
+                                        v.statusVoznje.ToString() + "#" + v.tipAutomobila.ToString() + "#" + v.vozac.korisnickoIme + "\n");
+                }
+
                 sr.Close();
+
+                StreamWriter sw = new StreamWriter(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\SveVoznje.txt");
+                sw.WriteLine(ret);
+                sw.Close();
             }
+            else
+            {
+                foreach (Voznja v in sveVoznje.Values)
+                {
+                    ret += string.Format(v.datumVreme.ToString() + "#" + v.dispecer.korisnickoIme + "#" + v.iznos + "#" + v.komentar.opis + "#" +
+                                        v.komentar.ocenaVoznje.ToString() + "#" + v.komentar.datumVreme.ToString() + "#" + v.lokacijaZaTaksi.Adress.Ulica + "#" +
+                                        v.lokacijaZaTaksi.Adress.BrojUlice + "#" + v.lokacijaZaTaksi.Adress.Grad + "#" + v.lokacijaZaTaksi.Adress.PozivniBroj + "#" +
+                                        v.musterija.korisnickoIme + "#" + v.odrediste.Adress.Ulica + "#" +
+                                        v.odrediste.Adress.BrojUlice + "#" + v.odrediste.Adress.Grad + "#" + v.odrediste.Adress.PozivniBroj + "#" +
+                                        v.statusVoznje.ToString() + "#" + v.tipAutomobila.ToString() + "#" + v.vozac.korisnickoIme + "\n");
+                }
 
-            string res = pom + string.Format(r.korisnickoIme + "_" + r.lozinka);
-
-            StreamWriter sw = new StreamWriter(@"C:\WEBProjekat\RegistrovaniKorisnici.txt");
-            sw.WriteLine(res);
-            sw.Close();
+                StreamWriter sw = new StreamWriter(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\SveVoznje.txt");
+                sw.WriteLine(ret);
+                sw.Close();
+            }
         }
 
-        //public static void CitajIzTxt()
-        //{
-        //    string pom = "";
-        //    string[] res;
-        //    Pol gender;
+        public static void UpisiVozace()
+        {
+            string ret = "";
+            string pom = "";
 
-        //    if (File.Exists(@"C:\WEBProjekat\Dispeceri.txt"))
-        //    {
-        //        StreamReader sr = new StreamReader(@"C:\WEBProjekat\Dispeceri.txt");
-        //        while((pom = sr.ReadLine()) != null)
-        //        {
-        //            res = pom.Split('_');
+            if (File.Exists(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\SviVozaci.txt"))
+            {
+                StreamReader sr = new StreamReader(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\SviVozaci.txt");
 
-        //            if (res[4] == "MUSKI")
-        //                gender = Pol.MUSKI;
-        //            else
-        //                gender = Pol.ZENSKI;
+                //while ((pom = sr.ReadLine()) != null)
+                //{
+                //    ret += pom + "\n";
+                //}
 
-        //            Dispecer d = new Dispecer(res[0], res[1], res[2], res[3], gender, res[5], res[6], res[7]);
-        //            registrovaniKorisnici.Add(res[0], d);
-        //        }
-        //        sr.Close();
-        //    }
-        //}
+                foreach (Vozac v in vozaci.Values)
+                {
+                    ret += string.Format(v.korisnickoIme + "#" + v.lozinka + "#" + v.ime + "#" + v.prezime + "#" + v.pol.ToString() + "#" +
+                                        v.email + "#" + v.jmbg + "#" + v.telefon + "#" + v.automobil.brojTaksija + ":" + v.automobil.godisteAutomobila + ":" + 
+                                        v.automobil.registracija + ":" + v.automobil.tipAutomobila.ToString() + "#" + 
+                                        v.lokacija.Adress.Ulica + ":" + v.lokacija.Adress.BrojUlice + ":" + v.lokacija.Adress.Grad + ":" + v.lokacija.Adress.PozivniBroj + "#" +
+                                        v.uloga.ToString() + "\n");
+                }
+
+                sr.Close();
+
+                StreamWriter sw = new StreamWriter(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\SviVozaci.txt");
+                sw.WriteLine(ret);
+                sw.Close();
+            }
+            else
+            {
+                if (vozaci.Count != 0)
+                {
+                    foreach (Vozac v in vozaci.Values)
+                    {
+                        ret += string.Format(v.korisnickoIme + "#" + v.lozinka + "#" + v.ime + "#" + v.prezime + "#" + v.pol.ToString() + "#" +
+                                            v.email + "#" + v.jmbg + "#" + v.telefon + "#" + v.automobil.brojTaksija + ":" + v.automobil.godisteAutomobila + ":" +
+                                            v.automobil.registracija + ":" + v.automobil.tipAutomobila.ToString() + "#" +
+                                            v.lokacija.Adress.Ulica + ":" + v.lokacija.Adress.BrojUlice + ":" + v.lokacija.Adress.Grad + ":" + v.lokacija.Adress.PozivniBroj + "#" +
+                                            v.uloga.ToString() + "\n");
+                    }
+
+                    StreamWriter sw = new StreamWriter(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\SviVozaci.txt");
+                    sw.WriteLine(ret);
+                    sw.Close();
+                }
+            }
+        }
+
+        public static void UpisiRegKorisnike()
+        {
+            string ret = "";
+
+            if (File.Exists(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\RegistrovaniKorisnici.txt"))
+            {
+                StreamReader sr = new StreamReader(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\RegistrovaniKorisnici.txt");
+
+                foreach (Korisnik k in registrovaniKorisnici.Values)
+                {
+                    if(k.uloga != Uloga.DISPECER)
+                        ret += string.Format(k.korisnickoIme + "#" + k.lozinka + "#" + k.ime + "#" + k.prezime + "#" + k.email + "#" + k.jmbg + "#" + k.pol.ToString() + "#" + k.telefon + "#" + k.uloga.ToString() + "\n");
+                }
+
+                sr.Close();
+
+                StreamWriter sw = new StreamWriter(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\RegistrovaniKorisnici.txt");
+                sw.WriteLine(ret);
+                sw.Close();
+            }
+            else
+            {
+                foreach (Korisnik k in registrovaniKorisnici.Values)
+                {
+                    if(k.uloga != Uloga.DISPECER)
+                        ret += string.Format(k.korisnickoIme + "#" + k.lozinka + "#" + k.ime + "#" + k.prezime + "#" + k.email + "#" + k.jmbg + "#" + k.pol.ToString() + "#" + k.telefon + "#" + k.uloga.ToString() + "\n");
+                }
+
+                StreamWriter sw = new StreamWriter(@"C:\Users\Petar\Desktop\WP1718-PR108-2015\TaxiSluzba\RegistrovaniKorisnici.txt");
+                sw.WriteLine(ret);
+                sw.Close();
+            }
+        }
     }
 }

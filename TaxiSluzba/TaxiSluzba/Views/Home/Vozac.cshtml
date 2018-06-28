@@ -77,11 +77,14 @@
 <form action="/Home/PreuzimanjeVoznje" method="post">
     <select name="voznja">
         @{
-            foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.voznjeNaCekanju.Values)
+            foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.sveVoznje.Values)
             {
                 if (v.tipAutomobila.ToString() == Model.automobil.tipAutomobila.ToString())
                 {
-                    <option value="@v.datumVreme.ToString()">@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj - @v.tipAutomobila.ToString() </option>
+                    if(v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
+                    {
+                        <option value="@v.datumVreme.ToString()">@v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj - @v.tipAutomobila.ToString() </option>
+                    }
                 }
             }
         }

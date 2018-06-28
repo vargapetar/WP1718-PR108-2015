@@ -174,9 +174,12 @@
                     <td align="left">
                         <select name="izabraniVozac">
                             @{
-                                foreach (TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.slobodniVozaci.Values)
+                                foreach (TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.vozaci.Values)
                                 {
-                                    <option value="@v.korisnickoIme">@v.korisnickoIme, @v.automobil.tipAutomobila.ToString()</option>
+                                    if(v.slobodan == true)
+                                    { 
+                                        <option value="@v.korisnickoIme">@v.korisnickoIme, @v.automobil.tipAutomobila.ToString()</option>
+                                    }
                                 }
                             }
                         </select>
@@ -195,9 +198,12 @@
         <form action="/Home/DodeliVozacaVoznji" method="post">
             <select name="voznja">
                 @{
-                    foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.voznjeNaCekanju.Values)
+                    foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.sveVoznje.Values)
                     {
-                        <option value="@v.datumVreme.ToString()">@v.musterija.korisnickoIme - @v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj - @v.tipAutomobila.ToString() </option>
+                        if(v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
+                        { 
+                            <option value="@v.datumVreme.ToString()">@v.musterija.korisnickoIme - @v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj - @v.tipAutomobila.ToString() </option>
+                        }
                     }
                 }
             </select>
@@ -205,9 +211,12 @@
             <h4> Spisak slobodnih vozaca</h4>
             <select name="vozac">
                 @{
-                    foreach (TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.slobodniVozaci.Values)
+                    foreach (TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.vozaci.Values)
                     {
-                        <option value="@v.korisnickoIme">@v.korisnickoIme - @v.automobil.tipAutomobila.ToString() </option>
+                        if(v.slobodan == true)
+                        {
+                            <option value="@v.korisnickoIme">@v.korisnickoIme - @v.automobil.tipAutomobila.ToString() </option>
+                        }
                     }
                 }
             </select>

@@ -9,6 +9,7 @@ namespace TaxiSluzba.Models
     {
         public Lokacija lokacija { get; set; }
         public Automobil automobil { get; set; }
+        public bool slobodan { get; set; }
 
         public Vozac() { voznje = new List<Voznja>(); }
 
@@ -26,6 +27,7 @@ namespace TaxiSluzba.Models
             this.lokacija = lokacija;
             this.automobil = automobil;
             voznje = new List<Voznja>();
+            slobodan = true;
         }
     }
 }
