@@ -87,6 +87,14 @@ namespace TaxiSluzba.Controllers
             }
         }
 
+        public ActionResult Odjava()
+        {
+            Session.Abandon();
+            Korisnik d = new Korisnik();
+            Session["korisnik"] = d;
+            return View("HomePage");
+        }
+
         [HttpPost]
         public ActionResult Preusmeri()
         {

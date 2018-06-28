@@ -176,8 +176,8 @@
                             @{
                                 foreach (TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.vozaci.Values)
                                 {
-                                    if(v.slobodan == true)
-                                    { 
+                                    if (v.slobodan == true)
+                                    {
                                         <option value="@v.korisnickoIme">@v.korisnickoIme, @v.automobil.tipAutomobila.ToString()</option>
                                     }
                                 }
@@ -200,8 +200,8 @@
                 @{
                     foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.sveVoznje.Values)
                     {
-                        if(v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
-                        { 
+                        if (v.statusVoznje == TaxiSluzba.Models.StatusVoznje.KREIRANA_NA_CEKANJU)
+                        {
                             <option value="@v.datumVreme.ToString()">@v.musterija.korisnickoIme - @v.lokacijaZaTaksi.Adress.Ulica @v.lokacijaZaTaksi.Adress.BrojUlice, @v.lokacijaZaTaksi.Adress.Grad, @v.lokacijaZaTaksi.Adress.PozivniBroj - @v.tipAutomobila.ToString() </option>
                         }
                     }
@@ -213,7 +213,7 @@
                 @{
                     foreach (TaxiSluzba.Models.Vozac v in TaxiSluzba.Models.Database.vozaci.Values)
                     {
-                        if(v.slobodan == true)
+                        if (v.slobodan == true)
                         {
                             <option value="@v.korisnickoIme">@v.korisnickoIme - @v.automobil.tipAutomobila.ToString() </option>
                         }
@@ -234,7 +234,7 @@
                 <td><b>Vozac:</b></td>
                 <td><b>Status voznje:</b></td>
             </tr>
-            @foreach(TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.sveVoznje.Values)
+            @foreach (TaxiSluzba.Models.Voznja v in TaxiSluzba.Models.Database.sveVoznje.Values)
             {
                 <tr>
                     <td>@v.datumVreme.ToString()</td>
@@ -248,88 +248,95 @@
         </table>
 
         <form action="/Home/Filtriranje" method="post">
-                <table>
-                    <tr>
-                        <td>Filtriraj:</td>
-                        <td>
-                            <select name="statusVoznje">
-                                <option value="KREIRANA_NA_CEKANJU">Kreirana, na cekanju</option>
-                                <option value="FORMIRANA">Formirana</option>
-                                <option value="OBRADJENA">Obradjena</option>
-                                <option value="PRIHVACENA">Prihvacena</option>
-                                <option value="U_TOKU">U toku</option>
-                                <option value="OTKAZANA">Otkazana</option>
-                                <option value="NEUSPESNA">Neuspesna</option>
-                                <option value="USPESNA">Uspesna</option>
-                            </select>
-                        </td>
-                        <td><input type="submit" value="Filtriraj"></td>
-                    </tr>
-                </table>
-            </form>
+            <table>
+                <tr>
+                    <td>Filtriraj:</td>
+                    <td>
+                        <select name="statusVoznje">
+                            <option value="KREIRANA_NA_CEKANJU">Kreirana, na cekanju</option>
+                            <option value="FORMIRANA">Formirana</option>
+                            <option value="OBRADJENA">Obradjena</option>
+                            <option value="PRIHVACENA">Prihvacena</option>
+                            <option value="U_TOKU">U toku</option>
+                            <option value="OTKAZANA">Otkazana</option>
+                            <option value="NEUSPESNA">Neuspesna</option>
+                            <option value="USPESNA">Uspesna</option>
+                        </select>
+                    </td>
+                    <td><input type="submit" value="Filtriraj"></td>
+                </tr>
+            </table>
+        </form>
 
-            <form action="/Home/Sortiranje" method="post">
-                <table>
-                    <tr>
-                        <td>Sortiraj po:</td>
-                        <td>
-                            <select name="sortirajPo">
-                                <option value="datumu">Datumu</option>
-                                <option value="oceni">Oceni</option>
-                            </select>
-                        </td>
-                        <td><input type="submit" value="Sortiraj"></td>
-                    </tr>
-                </table>
-            </form>
+        <form action="/Home/Sortiranje" method="post">
+            <table>
+                <tr>
+                    <td>Sortiraj po:</td>
+                    <td>
+                        <select name="sortirajPo">
+                            <option value="datumu">Datumu</option>
+                            <option value="oceni">Oceni</option>
+                        </select>
+                    </td>
+                    <td><input type="submit" value="Sortiraj"></td>
+                </tr>
+            </table>
+        </form>
 
-            <form action="/Home/PretragaDispecer" method="post">
-                <table>
-                    <tr>
-                        <td>Pretraga po datumu:</td>
-                        <td><input type="text" name="datumOd"></td>
-                        <td><input type="text" name="datumDo"></td>
-                    </tr>
-                    <tr>
-                        <td>Pretraga po oceni:</td>
-                        <td><select name="ocenaOd">
-                                <option value="NULA"></option>
-                                <option value="JEDAN">1</option>
-                                <option value="DVA">2</option>
-                                <option value="TRI">3</option>
-                                <option value="CETIRI">4</option>
-                                <option value="PET">5</option>
-                            </select></td>
-                        <td><select name="ocenaDo">
-                                <option value="NULA"></option>
-                                <option value="JEDAN">1</option>
-                                <option value="DVA">2</option>
-                                <option value="TRI">3</option>
-                                <option value="CETIRI">4</option>
-                                <option value="PET">5</option>
-                            </select></td>
-                    </tr>
-                    <tr>
-                        <td>Pretraga po ceni:</td>
-                        <td><input type="text" name="cenaOd"></td>
-                        <td><input type="text" name="cenaDo"></td>
-                    </tr>
-                    <tr>
-                        <td>Pretraga vozaca:</td>
-                        <td><input type="text" name="imeVozaca"></td>
-                        <td><input type="text" name="prezimeVozaca"></td>
-                    </tr>
-                    <tr>
-                        <td>Pretraga musterije:</td>
-                        <td><input type="text" name="imeMusterije"></td>
-                        <td><input type="text" name="prezimeMusterije"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" align="center"><input type="submit" value="Pretraga"></td>
-                    </tr>
-                </table>
-            </form>
-    </div>
+        <form action="/Home/PretragaDispecer" method="post">
+            <table>
+                <tr>
+                    <td>Pretraga po datumu:</td>
+                    <td><input type="text" name="datumOd"></td>
+                    <td><input type="text" name="datumDo"></td>
+                </tr>
+                <tr>
+                    <td>Pretraga po oceni:</td>
+                    <td>
+                        <select name="ocenaOd">
+                            <option value="NULA"></option>
+                            <option value="JEDAN">1</option>
+                            <option value="DVA">2</option>
+                            <option value="TRI">3</option>
+                            <option value="CETIRI">4</option>
+                            <option value="PET">5</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="ocenaDo">
+                            <option value="NULA"></option>
+                            <option value="JEDAN">1</option>
+                            <option value="DVA">2</option>
+                            <option value="TRI">3</option>
+                            <option value="CETIRI">4</option>
+                            <option value="PET">5</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pretraga po ceni:</td>
+                    <td><input type="text" name="cenaOd"></td>
+                    <td><input type="text" name="cenaDo"></td>
+                </tr>
+                <tr>
+                    <td>Pretraga vozaca:</td>
+                    <td><input type="text" name="imeVozaca"></td>
+                    <td><input type="text" name="prezimeVozaca"></td>
+                </tr>
+                <tr>
+                    <td>Pretraga musterije:</td>
+                    <td><input type="text" name="imeMusterije"></td>
+                    <td><input type="text" name="prezimeMusterije"></td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="center"><input type="submit" value="Pretraga"></td>
+                </tr>
+            </table>
+        </form>
+    </div><hr>
+    <form action="/Home/Odjava">
+        <input type="submit" value="Odjavi se">
+    </form>
 </body>
 </html>
 
